@@ -5,19 +5,17 @@ export const SITE = {
   marca: 'Baú Pedagógico',
   appId: 'bau-pedagogico',
   preco: 9.99,
-  // Confirme o número real de arquivos do seu acervo antes de anunciar.
-  qtdMateriais: '+25.000',
+  // Número real de arquivos no portal (atualize quando subir material novo).
+  qtdMateriais: '+130',
   whatsapp: '', // ex: '5581999999999' — mostra botão de suporte se preenchido
 
   categorias: [
-    { icone: '🔤', titulo: 'Alfabetização e letramento' },
-    { icone: '🔢', titulo: 'Matemática lúdica' },
-    { icone: '🎲', titulo: 'Jogos educativos' },
-    { icone: '📋', titulo: 'Planos de aula' },
-    { icone: '🧩', titulo: 'Educação especial e inclusão' },
+    { icone: '🧸', titulo: 'Educação infantil' },
+    { icone: '🔤', titulo: 'Português e linguagem' },
+    { icone: '🧠', titulo: 'Atividades cognitivas' },
     { icone: '🎉', titulo: 'Datas comemorativas' },
-    { icone: '🎨', titulo: 'Artes e coordenação motora' },
-    { icone: '💬', titulo: 'Recursos terapêuticos' },
+    { icone: '🏫', titulo: 'Gestão escolar e projetos' },
+    { icone: '🎒', titulo: 'Volta às aulas' },
   ],
 
   // Imagem principal do hero (em /public). Se vazio, usa o leque de fichas ilustradas.
@@ -55,7 +53,7 @@ export const SITE = {
   faq: [
     {
       p: 'Como recebo o material?',
-      r: 'Assim que o Pix for confirmado, o link de acesso aparece na tela na hora. Guarde esse link: ele é o seu acesso.',
+      r: 'Na compra você cria um e-mail e senha. Assim que o Pix for confirmado, o portal com todos os materiais abre na hora, e você volta quando quiser pelo botão "Já comprei · Entrar".',
     },
     {
       p: 'Tem mensalidade?',
@@ -67,11 +65,11 @@ export const SITE = {
     },
     {
       p: 'Para qual faixa etária é o material?',
-      r: 'O acervo vai da educação infantil ao fundamental I, com uma seção dedicada à educação especial.',
+      r: 'O foco é a educação infantil e os anos iniciais. Também há materiais de gestão escolar: fichas pedagógicas, planos de ação e projetos.',
     },
     {
       p: 'Preciso saber editar arquivos?',
-      r: 'Não. A maior parte já vem pronta para imprimir e usar. Parte do material é editável para quem quiser personalizar.',
+      r: 'Não. A maior parte vem em PDF, pronta para imprimir. Fichas, planos e projetos também vêm em Word, para editar com os dados da sua escola.',
     },
   ],
 };

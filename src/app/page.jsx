@@ -19,7 +19,7 @@ const COR = { creme: '#fff8ee', tinta: '#1f2a44', branco: '#ffffff', pessego: '#
 const BENEFICIOS = [
   'Pronto para imprimir e aplicar',
   'Para professoras, mães e terapeutas',
-  'Educação infantil ao fundamental I',
+  'Educação infantil, anos iniciais e gestão',
   'Pagamento único, acesso vitalício',
 ];
 
@@ -40,12 +40,12 @@ const TAREFAS = [
 ];
 
 const PASTAS = [
-  ['🔤', 'Alfabetização', '#ff6b4a'],
-  ['🔢', 'Matemática', '#16a864'],
-  ['🎲', 'Jogos educativos', '#7b8cff'],
-  ['📋', 'Planos de aula', '#ffb020'],
-  ['🧩', 'Educação especial', '#2ec4a0'],
-  ['🎉', 'Datas comemorativas', '#ff8fb1'],
+  ['🧸', 'Educação Infantil', '#ff6b4a'],
+  ['🔤', 'Português', '#16a864'],
+  ['🧠', 'Atividades Lúdicas', '#7b8cff'],
+  ['🎉', 'Datas Comemorativas', '#ffb020'],
+  ['🏫', 'Gestão Escolar', '#2ec4a0'],
+  ['🎒', 'Recursos do Professor', '#ff8fb1'],
 ];
 
 function FaixaPrevias({ reverso = false }) {
@@ -84,14 +84,14 @@ export default function Home() {
           <div className="hero-texto">
             <span className="selo">{SITE.marca}</span>
             <h1>
-              {SITE.qtdMateriais} atividades{' '}
+              {SITE.qtdMateriais} materiais{' '}
               <span className="destaque">
-                prontas pra imprimir
+                prontos pra imprimir
                 <Sublinhado className="sublinhado" />
               </span>
             </h1>
             <p className="hero-sub">
-              Alfabetização, matemática, jogos, inclusão e datas comemorativas num baú só. Abra a pasta, imprima e
+              Atividades para imprimir, cadernos de colorir, datas comemorativas e materiais de gestão escolar num baú só. Abra a pasta, imprima e
               aplique amanhã mesmo.
             </p>
             <ul className="checks">
@@ -160,7 +160,7 @@ export default function Home() {
           <p className="sobretitulo">espia só 👀</p>
           <h2>Um pouquinho do que tem dentro do baú</h2>
           <p className="secao-sub">
-            Fichas coloridas, com letra grande e espaço pra criança fazer. É imprimir e entregar.
+            Exemplos do tipo de atividade que você encontra: letra grande, espaço pra criança fazer e pronto pra imprimir.
           </p>
         </div>
         <FaixaPrevias />
@@ -246,7 +246,7 @@ export default function Home() {
               <span className="beneficio-ico">✏️</span>
               <div>
                 <h3>Variedade pro ano inteiro</h3>
-                <p>De alfabetização a festa junina, sempre tem algo novo pra aplicar.</p>
+                <p>Da volta às aulas ao Natal, sempre tem algo pra aplicar.</p>
               </div>
             </div>
             <div className="beneficio">

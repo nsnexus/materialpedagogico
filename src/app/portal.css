@@ -320,7 +320,197 @@
   padding: 6px 12px;
 }
 
+/* Painel administrativo */
+.admin-link-topo {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 700;
+}
+
+.admin-numeros {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.admin-numeros div {
+  background: var(--branco);
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--tinta-suave);
+  font-size: 0.88rem;
+  box-shadow: 0 3px 10px rgba(31, 42, 68, 0.05);
+}
+
+.admin-numeros strong {
+  display: block;
+  font: 800 1.7rem/1.1 'Baloo 2', sans-serif;
+  color: var(--coral);
+}
+
+.admin-card {
+  background: var(--branco);
+  border-radius: var(--raio);
+  padding: 22px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 10px rgba(31, 42, 68, 0.05);
+}
+
+.admin-abas {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.admin-abas button {
+  background: var(--creme);
+  border: 2px solid var(--borda);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font: 800 0.92rem 'Nunito', sans-serif;
+  cursor: pointer;
+  color: var(--tinta);
+}
+
+.admin-abas button.ativa {
+  background: var(--tinta);
+  border-color: var(--tinta);
+  color: var(--branco);
+}
+
+.admin-form label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+}
+
+.admin-form input:not([type='file']) {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px 14px;
+  border: 2px solid var(--borda);
+  border-radius: 12px;
+  font: 600 1rem 'Nunito', sans-serif;
+}
+
+.admin-form input[type='file'] {
+  display: block;
+  margin-top: 8px;
+  font: 600 0.92rem 'Nunito', sans-serif;
+  max-width: 100%;
+}
+
+.admin-form input:focus {
+  outline: none;
+  border-color: var(--coral);
+}
+
+.admin-form .btn-buy {
+  animation: none;
+}
+
+.admin-ajuda {
+  display: block;
+  font-weight: 600;
+  color: var(--tinta-suave);
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
+.admin-ok {
+  color: var(--verde-escuro);
+  font-weight: 700;
+  margin: 14px 0 0;
+}
+
+.admin-lista-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.admin-lista-topo h2 {
+  margin: 0;
+}
+
+.admin-filtro {
+  padding: 9px 14px;
+  border: 2px solid var(--borda);
+  border-radius: 999px;
+  font: 600 0.92rem 'Nunito', sans-serif;
+  min-width: 0;
+  flex: 1;
+  max-width: 280px;
+}
+
+.admin-lista,
+.admin-vendas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.admin-lista li,
+.admin-vendas li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px;
+  border-bottom: 1px solid #f1ece4;
+}
+
+.admin-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-item-info span {
+  display: block;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.admin-item-info small,
+.admin-vendas small {
+  color: var(--tinta-suave);
+  font-size: 0.78rem;
+  overflow-wrap: anywhere;
+}
+
+.admin-vendas li {
+  justify-content: space-between;
+  font-weight: 700;
+}
+
+.admin-excluir {
+  background: none;
+  border: 2px solid #f3c7c7;
+  color: #c62828;
+  border-radius: 999px;
+  padding: 5px 12px;
+  font: 800 0.8rem 'Nunito', sans-serif;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.admin-excluir:hover {
+  background: #fdecec;
+}
+
 @media (max-width: 560px) {
+  .admin-numeros {
+    grid-template-columns: repeat(2, 1fr);
+  }
   .arq {
     flex-wrap: wrap;
   }

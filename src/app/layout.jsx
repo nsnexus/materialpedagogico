@@ -8,7 +8,7 @@ export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3010'),
   title: `${SITE.marca} | ${SITE.qtdMateriais} materiais pedagógicos`,
   description:
-    'Atividades, planos de aula, jogos e recursos de educação especial prontos para imprimir. Pagamento único, acesso vitalício.',
+    'Atividades para imprimir, cadernos de colorir, datas comemorativas, fichas e projetos escolares. Pagamento único, acesso vitalício.',
 };
 
 export const viewport = {

@@ -33,7 +33,18 @@ Para ter arquivos no portal local: `node scripts/subir-acervo.mjs "<pasta>" --lo
 A conta só nasce quando o Pix do pedido é pago, então ninguém consegue trocar a senha de um pedido alheio.
 "Esqueci a senha" ainda é manual (suporte); dá para automatizar com envio de e-mail (ex: Resend).
 
-## Subir o acervo
+## Painel administrativo (`/admin`)
+
+Entra com a senha do segredo `ADMIN_PASSWORD` do Pages. Lá dá para:
+
+- enviar arquivos (vários de uma vez, até 95 MB cada) para uma pasta existente ou nova;
+- adicionar links externos (Canva, Drive, YouTube…), que aparecem no portal com botão "Abrir";
+- excluir arquivos e links (o arquivo também é apagado do R2);
+- ver quantidade de clientes e as últimas vendas.
+
+Para trocar a senha: `npx wrangler pages secret put ADMIN_PASSWORD --project-name bau-pedagogico`.
+
+## Subir o acervo em lote
 
 A estrutura de pastas vira a navegação do portal (1ª pasta = categoria):
 
@@ -42,7 +53,8 @@ node scripts/subir-acervo.mjs "C:\caminho\do\acervo"
 ```
 
 Usa o login do `wrangler` (`npx wrangler login`), sem token. Arquivos já enviados com o mesmo tamanho
-são pulados, então é só rodar de novo para adicionar materiais ou refazer falhas. Se ficar lento, o modo
+são pulados, então é só rodar de novo para adicionar materiais ou refazer falhas. O que foi adicionado
+pelo painel (links e uploads de outras pastas) é mantido no catálogo. Se ficar lento, o modo
 `--s3` usa a API S3 do R2 (precisa de `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID` e `R2_SECRET_ACCESS_KEY` no `.env.local`).
 
 ## Deploy (Cloudflare Pages)
@@ -50,7 +62,7 @@ são pulados, então é só rodar de novo para adicionar materiais ou refazer fa
 1. Bucket R2 `bau-acervo` e KV `BAU_KV` já criados na conta do nsmusic (id no `wrangler.toml`).
 2. No projeto do Pages: build `npx @cloudflare/next-on-pages`, saída `.vercel/output/static`, flag `nodejs_compat`.
 3. Bindings: KV `BAU_KV` e R2 `ACERVO` (Settings > Functions).
-4. Variáveis: `NSNEXUS_GATEWAY_URL`, `NSNEXUS_GATEWAY_API_KEY`, `SESSION_SECRET`, `NEXT_PUBLIC_SITE_URL`.
+4. Variáveis: `NSNEXUS_GATEWAY_URL`, `NSNEXUS_GATEWAY_API_KEY`, `SESSION_SECRET`, `ADMIN_PASSWORD`, `NEXT_PUBLIC_SITE_URL`.
    Nunca defina `DEV_PIX_FAKE` em produção (só funciona com `NODE_ENV=development`, mas não custa evitar).
 
 ## Notificações de compra

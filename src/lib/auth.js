@@ -52,9 +52,13 @@ async function assinar(texto) {
   return b64url(await crypto.subtle.sign('HMAC', chave, enc.encode(texto)));
 }
 
-export async function criarTokenSessao(email) {
-  const payload = b64url(enc.encode(JSON.stringify({ email, exp: Date.now() + SESSAO_DIAS * 864e5 })));
+async function criarToken(dados, dias) {
+  const payload = b64url(enc.encode(JSON.stringify({ ...dados, exp: Date.now() + dias * 864e5 })));
   return `${payload}.${await assinar(payload)}`;
+}
+
+export function criarTokenSessao(email) {
+  return criarToken({ email }, SESSAO_DIAS);
 }
 
 export async function lerTokenSessao(token) {
@@ -81,6 +85,27 @@ export function opcoesCookie(maxAgeSeg) {
 
 export async function gravarSessao(res, email) {
   res.cookies.set(COOKIE_SESSAO, await criarTokenSessao(email), opcoesCookie(SESSAO_DIAS * 86400));
+}
+
+// --- Admin: senha única em ADMIN_PASSWORD, sessão de 7 dias em cookie próprio ---
+export const COOKIE_ADMIN = 'bp_admin';
+const ADMIN_DIAS = 7;
+
+export async function conferirSenhaAdmin(senha) {
+  const certa = variavel('ADMIN_PASSWORD');
+  if (!certa) return false;
+  // Compara os hashes para não vazar o tamanho da senha pelo tempo de resposta.
+  const h = async (s) => b64url(await crypto.subtle.digest('SHA-256', enc.encode(s)));
+  return iguais(await h(senha), await h(certa));
+}
+
+export async function gravarSessaoAdmin(res) {
+  res.cookies.set(COOKIE_ADMIN, await criarToken({ admin: true }, ADMIN_DIAS), opcoesCookie(ADMIN_DIAS * 86400));
+}
+
+export async function ehAdmin(cookies) {
+  const dados = await lerTokenSessao(cookies.get(COOKIE_ADMIN)?.value);
+  return dados?.admin === true;
 }
 
 // Sessão válida + conta ativa. Retorna a conta ou null.

@@ -60,12 +60,15 @@ async function destinoWrangler(remoto) {
     async enviar(chave, corpo, tipo) {
       await bucket.put(chave, corpo, { httpMetadata: { contentType: tipo } });
     },
+    async lerTexto(chave) {
+      return (await bucket.get(chave))?.text() ?? null;
+    },
     fechar: () => proxy.dispose(),
   };
 }
 
 async function destinoR2() {
-  const { S3Client, HeadObjectCommand, PutObjectCommand } = await import('@aws-sdk/client-s3');
+  const { S3Client, HeadObjectCommand, PutObjectCommand, GetObjectCommand } = await import('@aws-sdk/client-s3');
   const { R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET = 'bau-acervo' } = process.env;
   if (!R2_ACCOUNT_ID || !R2_ACCESS_KEY_ID || !R2_SECRET_ACCESS_KEY) {
     throw new Error('Configure R2_ACCOUNT_ID, R2_ACCESS_KEY_ID e R2_SECRET_ACCESS_KEY no .env.local');
@@ -85,6 +88,13 @@ async function destinoR2() {
     },
     async enviar(chave, corpo, tipo) {
       await s3.send(new PutObjectCommand({ Bucket: R2_BUCKET, Key: chave, Body: corpo, ContentType: tipo }));
+    },
+    async lerTexto(chave) {
+      try {
+        return await (await s3.send(new GetObjectCommand({ Bucket: R2_BUCKET, Key: chave }))).Body.transformToString();
+      } catch (e) {
+        return null;
+      }
     },
     fechar: async () => s3.destroy(),
   };
@@ -129,13 +139,22 @@ async function main() {
   }
   await Promise.all(Array.from({ length: PARALELO }, trabalhador));
 
+  // Mantém no catálogo o que foi adicionado pelo painel (links e uploads que não estão nesta pasta).
+  const locais = new Set(arquivos.map((a) => a.chave));
+  const existente = JSON.parse((await destino.lerTexto('_catalogo.json')) || '{"arquivos":[]}').arquivos;
+  const mantidos = existente.filter((a) => !locais.has(a.k));
   const catalogo = {
     geradoEm: new Date().toISOString(),
-    arquivos: arquivos.map((a) => ({ k: a.chave, t: a.tamanho })),
+    arquivos: [...arquivos.map((a) => ({ k: a.chave, t: a.tamanho })), ...mantidos].sort((a, b) =>
+      a.k.localeCompare(b.k, 'pt-BR')
+    ),
   };
   await destino.enviar('_catalogo.json', JSON.stringify(catalogo), 'application/json');
   await destino.fechar();
-  console.log(`\nCatálogo atualizado com ${arquivos.length} arquivos.${falhas ? ` Rode de novo para refazer ${falhas} falha(s).` : ''}`);
+  console.log(
+    `\nCatálogo atualizado: ${arquivos.length} desta pasta + ${mantidos.length} já existentes.` +
+      (falhas ? ` Rode de novo para refazer ${falhas} falha(s).` : '')
+  );
 }
 
 main().catch((e) => {

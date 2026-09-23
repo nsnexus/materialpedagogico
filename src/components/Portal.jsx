@@ -43,6 +43,23 @@ function montarArvore(arquivos) {
 }
 
 function LinhaArquivo({ a }) {
+  const pasta = a.mostrarPasta ? a.k.split('/').slice(0, -1).join(' › ') : '';
+  if (a.link) {
+    return (
+      <li className="arq">
+        <span className="arq-ico">🔗</span>
+        <div className="arq-info">
+          <span className="arq-nome">{a.nome}</span>
+          <small>Link externo{pasta && ` · ${pasta}`}</small>
+        </div>
+        <div className="arq-acoes">
+          <a href={a.url} target="_blank" rel="noopener noreferrer" className="arq-btn">
+            Abrir
+          </a>
+        </div>
+      </li>
+    );
+  }
   const e = ext(a.nome);
   const url = `/api/portal/arquivo?k=${encodeURIComponent(a.k)}`;
   return (
@@ -52,7 +69,7 @@ function LinhaArquivo({ a }) {
         <span className="arq-nome">{a.nome.replace(/\.[^.]+$/, '')}</span>
         <small>
           {e.toUpperCase()} · {tamanho(a.t)}
-          {a.mostrarPasta ? ` · ${a.k.split('/').slice(0, -1).join(' › ')}` : ''}
+          {pasta && ` · ${pasta}`}
         </small>
       </div>
       <div className="arq-acoes">
