@@ -22,11 +22,14 @@ export async function POST(req) {
     if (!conta || !(await conferirSenha(senha, conta))) {
       return NextResponse.json({ error: 'E-mail ou senha incorretos.' }, { status: 401 });
     }
+    if (conta.status === 'bloqueada') {
+      return NextResponse.json({ error: 'Acesso bloqueado. Fale com o suporte.' }, { status: 403 });
+    }
     if (conta.status !== 'ativa') {
       return NextResponse.json({ error: 'Acesso ainda não liberado.' }, { status: 403 });
     }
     const res = NextResponse.json({ ok: true });
-    await gravarSessao(res, conta.email);
+    await gravarSessao(res, conta);
     return res;
   } catch (err) {
     console.error('[POST /api/entrar]', err.message);

@@ -30,6 +30,56 @@ export async function ativarConta(pedido, txid) {
   return conta;
 }
 
+// Altera a conta; com derrubarSessoes, todas as sessões abertas dela deixam de valer.
+export async function atualizarConta(email, alteracoes, { derrubarSessoes = false } = {}) {
+  const conta = await getConta(email);
+  if (!conta) return null;
+  const nova = { ...conta, ...alteracoes, versao: (conta.versao || 0) + (derrubarSessoes ? 1 : 0) };
+  await salvarConta(nova);
+  return nova;
+}
+
+// Lista contas por prefixo do e-mail, 50 por página.
+export async function listarContas(prefixo = '', cursor) {
+  const pagina = await store().list({ prefix: `conta:${normalizarEmail(prefixo)}`, limit: 50, cursor: cursor || undefined });
+  const contas = await Promise.all(pagina.keys.map((k) => store().get(k.name, 'json')));
+  return {
+    contas: contas.filter(Boolean).map(({ nome, email, status, criadoEm }) => ({ nome, email, status, criadoEm })),
+    cursor: pagina.list_complete ? null : pagina.cursor,
+  };
+}
+
+// --- Redefinição de senha: token aleatório de uso único, guardado só como hash, válido por 1 hora ---
+const TTL_RESET = 3600;
+
+async function hashToken(token) {
+  const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(token));
+  return [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+export async function criarTokenReset(email) {
+  const bytes = crypto.getRandomValues(new Uint8Array(32));
+  const token = [...bytes].map((b) => b.toString(16).padStart(2, '0')).join('');
+  await store().put(`reset:${await hashToken(token)}`, normalizarEmail(email), { expirationTtl: TTL_RESET });
+  return token;
+}
+
+export async function consumirTokenReset(token) {
+  if (!/^[0-9a-f]{64}$/.test(String(token || ''))) return null;
+  const chave = `reset:${await hashToken(token)}`;
+  const email = await store().get(chave);
+  if (email) await store().delete(chave);
+  return email;
+}
+
+// Limite genérico por chave (ex: pedidos de reset por e-mail).
+export async function dentroDoLimite(chave, maximo, janelaSeg) {
+  const n = Number((await store().get(`limite:${chave}`)) || 0);
+  if (n >= maximo) return false;
+  await store().put(`limite:${chave}`, String(n + 1), { expirationTtl: janelaSeg });
+  return true;
+}
+
 // Limite simples de tentativas de login por e-mail (10 a cada 15 min).
 export async function podeTentarLogin(email) {
   const chave = `tentativas:${normalizarEmail(email)}`;

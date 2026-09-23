@@ -57,8 +57,9 @@ async function criarToken(dados, dias) {
   return `${payload}.${await assinar(payload)}`;
 }
 
-export function criarTokenSessao(email) {
-  return criarToken({ email }, SESSAO_DIAS);
+// v = versão da sessão da conta; trocar senha ou bloquear incrementa e derruba sessões antigas.
+export function criarTokenSessao(conta) {
+  return criarToken({ email: conta.email, v: conta.versao || 0 }, SESSAO_DIAS);
 }
 
 export async function lerTokenSessao(token) {
@@ -83,8 +84,8 @@ export function opcoesCookie(maxAgeSeg) {
   };
 }
 
-export async function gravarSessao(res, email) {
-  res.cookies.set(COOKIE_SESSAO, await criarTokenSessao(email), opcoesCookie(SESSAO_DIAS * 86400));
+export async function gravarSessao(res, conta) {
+  res.cookies.set(COOKIE_SESSAO, await criarTokenSessao(conta), opcoesCookie(SESSAO_DIAS * 86400));
 }
 
 // --- Admin: senha única em ADMIN_PASSWORD, sessão de 7 dias em cookie próprio ---
@@ -113,5 +114,6 @@ export async function contaDaSessao(cookies) {
   const sessao = await lerTokenSessao(cookies.get(COOKIE_SESSAO)?.value);
   if (!sessao) return null;
   const conta = await getConta(sessao.email);
-  return conta?.status === 'ativa' ? conta : null;
+  if (conta?.status !== 'ativa' || (sessao.v || 0) !== (conta.versao || 0)) return null;
+  return conta;
 }

@@ -73,6 +73,120 @@ function CampoPasta({ valor, setValor, pastas, id }) {
   );
 }
 
+const STATUS = { ativa: '🟢 Ativa', bloqueada: '🔴 Bloqueada' };
+
+function SecaoClientes() {
+  const [busca, setBusca] = useState('');
+  const [contas, setContas] = useState(null);
+  const [cursor, setCursor] = useState(null);
+  const [aviso, setAviso] = useState(null); // { tipo, texto, link? }
+
+  async function carregar(mais = false) {
+    const qs = new URLSearchParams({ busca });
+    if (mais && cursor) qs.set('cursor', cursor);
+    const res = await fetch(`/api/admin/clientes?${qs}`, { cache: 'no-store' });
+    if (res.status === 401) return window.location.reload();
+    const d = await res.json();
+    setContas(mais ? [...(contas || []), ...d.contas] : d.contas);
+    setCursor(d.cursor);
+  }
+
+  useEffect(() => {
+    const t = setTimeout(() => carregar(), 300);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [busca]);
+
+  async function agir(c, acao) {
+    if (acao === 'bloquear' && !confirm(`Bloquear ${c.email}? Ela perde o acesso na hora, em todos os aparelhos.`)) return;
+    setAviso(null);
+    const res = await fetch('/api/admin/clientes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: c.email, acao }),
+    });
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok) return setAviso({ tipo: 'erro', texto: d.error || 'Falha na ação.' });
+    if (d.link) {
+      setAviso({ tipo: 'ok', texto: `Link de nova senha para ${c.email} (vale 1 hora, uso único):`, link: d.link });
+    } else {
+      setAviso({ tipo: 'ok', texto: acao === 'bloquear' ? `${c.email} bloqueada.` : `${c.email} reativada.` });
+    }
+    carregar();
+  }
+
+  async function copiar(link) {
+    try {
+      await navigator.clipboard.writeText(link);
+      setAviso((a) => ({ ...a, texto: 'Link copiado! Mande para a cliente pelo WhatsApp.' }));
+    } catch (e) {}
+  }
+
+  return (
+    <section className="admin-card">
+      <div className="admin-lista-topo">
+        <h2 className="portal-h2">Clientes</h2>
+        <input
+          className="admin-filtro"
+          type="search"
+          placeholder="Buscar pelo começo do e-mail…"
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
+        />
+      </div>
+      {aviso && (
+        <div className={aviso.tipo === 'ok' ? 'admin-ok' : 'modal-erro'}>
+          <p>{aviso.texto}</p>
+          {aviso.link && (
+            <div className="admin-link-gerado">
+              <code>{aviso.link}</code>
+              <button className="arq-btn" onClick={() => copiar(aviso.link)}>
+                Copiar
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+      {!contas && <p>Carregando…</p>}
+      {contas?.length === 0 && <p className="admin-ajuda">Nenhuma cliente encontrada.</p>}
+      <ul className="admin-lista">
+        {contas?.map((c) => (
+          <li key={c.email}>
+            <div className="admin-item-info">
+              <span>{c.nome}</span>
+              <small>
+                {c.email} · {STATUS[c.status] || c.status}
+                {c.criadoEm && ` · desde ${new Date(c.criadoEm).toLocaleDateString('pt-BR')}`}
+              </small>
+            </div>
+            <div className="admin-acoes">
+              {c.status === 'ativa' && (
+                <button className="admin-botao" onClick={() => agir(c, 'link-senha')}>
+                  Link de senha
+                </button>
+              )}
+              {c.status === 'ativa' ? (
+                <button className="admin-excluir" onClick={() => agir(c, 'bloquear')}>
+                  Bloquear
+                </button>
+              ) : (
+                <button className="admin-botao" onClick={() => agir(c, 'reativar')}>
+                  Reativar
+                </button>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+      {cursor && (
+        <button className="link-btn" onClick={() => carregar(true)}>
+          Carregar mais
+        </button>
+      )}
+    </section>
+  );
+}
+
 export function AdminPainel() {
   const [dados, setDados] = useState(null);
   const [aba, setAba] = useState('arquivo');
@@ -266,6 +380,8 @@ export function AdminPainel() {
             ))}
           </ul>
         </section>
+
+        <SecaoClientes />
 
         {dados?.vendas?.length > 0 && (
           <section className="admin-card">

@@ -31,7 +31,17 @@ Para ter arquivos no portal local: `node scripts/subir-acervo.mjs "<pasta>" --lo
 4. O portal lê `_catalogo.json` do R2 e baixa cada arquivo por `/api/portal/arquivo`, sempre conferindo a sessão.
 
 A conta só nasce quando o Pix do pedido é pago, então ninguém consegue trocar a senha de um pedido alheio.
-"Esqueci a senha" ainda é manual (suporte); dá para automatizar com envio de e-mail (ex: Resend).
+
+Cada conta tem uma `versao` gravada no cookie de sessão: trocar a senha ou bloquear a cliente incrementa
+a versão e derruba na hora todas as sessões abertas dela.
+
+### Esqueci a senha
+
+`/esqueci` manda um link de uso único (válido por 1 hora, guardado só como hash no KV) para `/redefinir`.
+O envio usa o [Resend](https://resend.com): configure `RESEND_API_KEY` e `EMAIL_REMETENTE`
+(ex: `Baú Pedagógico <acesso@seudominio.com.br>`, com o domínio verificado no Resend).
+Sem essas variáveis, a tela pede para a cliente falar com o suporte, e o admin gera o link pelo painel.
+A resposta é igual exista ou não a conta, para não revelar quem é cliente; no máximo 3 envios por hora por e-mail.
 
 ## Painel administrativo (`/admin`)
 
@@ -40,7 +50,9 @@ Entra com a senha do segredo `ADMIN_PASSWORD` do Pages. Lá dá para:
 - enviar arquivos (vários de uma vez, até 95 MB cada) para uma pasta existente ou nova;
 - adicionar links externos (Canva, Drive, YouTube…), que aparecem no portal com botão "Abrir";
 - excluir arquivos e links (o arquivo também é apagado do R2);
-- ver quantidade de clientes e as últimas vendas.
+- ver quantidade de clientes e as últimas vendas;
+- buscar clientes pelo e-mail, bloquear/reativar (bloquear derruba as sessões na hora) e gerar um
+  link de nova senha para mandar pelo WhatsApp.
 
 Para trocar a senha: `npx wrangler pages secret put ADMIN_PASSWORD --project-name bau-pedagogico`.
 

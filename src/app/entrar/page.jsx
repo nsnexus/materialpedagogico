@@ -56,14 +56,7 @@ export default function Entrar() {
           {enviando ? 'Entrando…' : 'Entrar'}
         </button>
         <p className="modal-nota">
-          Esqueceu a senha?{' '}
-          {SITE.whatsapp ? (
-            <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener noreferrer">
-              Fale com o suporte
-            </a>
-          ) : (
-            'Fale com o suporte.'
-          )}
+          <Link href="/esqueci">Esqueci a senha</Link>
         </p>
         <p className="modal-nota">
           Ainda não tem acesso? <Link href="/#oferta">Garanta o seu</Link>

@@ -507,6 +507,47 @@
   background: #fdecec;
 }
 
+.admin-acoes {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.admin-botao {
+  background: var(--creme);
+  border: 2px solid var(--borda);
+  color: var(--tinta);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font: 800 0.8rem 'Nunito', sans-serif;
+  cursor: pointer;
+}
+
+.admin-link-gerado {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 6px 0 12px;
+}
+
+.admin-link-gerado code {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.78rem;
+  background: var(--creme);
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--tinta);
+}
+
+.admin-ok p,
+.modal-erro p {
+  margin: 0 0 4px;
+}
+
 @media (max-width: 560px) {
   .admin-numeros {
     grid-template-columns: repeat(2, 1fr);

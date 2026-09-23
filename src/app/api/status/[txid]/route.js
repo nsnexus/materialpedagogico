@@ -24,12 +24,12 @@ export async function GET(req, { params }) {
     if (!pago) return NextResponse.json({ status: 'PENDING' });
 
     const pedido = await getPedido(txid);
-    if (pedido?.conta) await ativarConta(pedido, txid);
+    const conta = pedido?.conta ? await ativarConta(pedido, txid) : null;
     await registrarVenda(txid).catch((e) => console.warn('[status] vendas:', e.message));
 
     const res = NextResponse.json({ status: 'PAID' });
-    if (pedido?.email && req.cookies.get(COOKIE_PEDIDO)?.value === txid) {
-      await gravarSessao(res, pedido.email);
+    if (conta?.status === 'ativa' && req.cookies.get(COOKIE_PEDIDO)?.value === txid) {
+      await gravarSessao(res, conta);
       res.cookies.delete(COOKIE_PEDIDO);
     }
     return res;
