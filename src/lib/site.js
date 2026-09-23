@@ -38,11 +38,11 @@ export const SITE = {
     foto: '/autora.jpg',
     // Um item por parágrafo.
     texto: [
-      'O Baú Pedagógico nasceu da vontade de reunir materiais que realmente facilitem a rotina de professores, famílias e profissionais que acompanham crianças com diferentes necessidades de aprendizagem.',
-      'Tenho um carinho especial pela educação inclusiva e pelas famílias atípicas. Por isso, busco organizar atividades simples, adaptáveis e práticas, que ajudem tanto na sala de aula quanto em casa.',
-      'O Baú foi criado para economizar o tempo de quem ensina e oferecer recursos que possam ser usados de verdade no dia a dia.',
+      'O Baú Pedagógico nasceu da vontade de reunir, num lugar só, materiais que realmente facilitem a rotina de professores, coordenadores e famílias que acompanham crianças na educação infantil e nos anos iniciais.',
+      'Sei como é gastar a noite procurando atividade, montando ficha e adaptando projeto. Por isso organizei tudo por pastas: atividades para imprimir, cadernos de colorir, datas comemorativas e documentos de gestão escolar prontos para editar.',
+      'O Baú foi criado para economizar o tempo de quem ensina e oferecer recursos que possam ser usados de verdade no dia a dia, na sala de aula ou em casa.',
     ],
-    valores: ['💜 Educação inclusiva', '🏠 Famílias atípicas', '✂️ Simples e adaptável'],
+    valores: ['⏱️ Menos tempo planejando', '🖨️ Pronto para imprimir', '✏️ Editável no Word'],
   },
 
   // Só depoimentos reais, com autorização de quem escreveu.

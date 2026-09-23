@@ -18,7 +18,7 @@ const COR = { creme: '#fff8ee', tinta: '#1f2a44', branco: '#ffffff', pessego: '#
 
 const BENEFICIOS = [
   'Pronto para imprimir e aplicar',
-  'Para professoras, mães e terapeutas',
+  'Para professoras, coordenadoras e mães',
   'Educação infantil, anos iniciais e gestão',
   'Pagamento único, acesso vitalício',
 ];
