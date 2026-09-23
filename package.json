@@ -1,0 +1,28 @@
+{
+  "name": "bau-pedagogico",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "pages:build": "npx @cloudflare/next-on-pages"
+  },
+  "dependencies": {
+    "next": "^14.2.3",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-s3": "^3.1138.0",
+    "@cloudflare/next-on-pages": "^1.13.16",
+    "wrangler": "^4.136.3"
+  },
+  "allowScripts": {
+    "esbuild@0.15.18": true,
+    "esbuild@0.28.1": true,
+    "workerd@1.20250718.0": true,
+    "workerd@1.20260921.1": true
+  }
+}

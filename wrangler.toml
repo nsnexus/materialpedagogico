@@ -1,0 +1,15 @@
+# Bindings usados pelo site no Cloudflare Pages (e simulados localmente no `next dev`).
+name = "bau-pedagogico"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+# Contas, pedidos e vendas recentes
+[[kv_namespaces]]
+binding = "BAU_KV"
+id = "ff4ab6f82b8446cfb51f10e28a5d3e24"
+
+# Arquivos do acervo
+[[r2_buckets]]
+binding = "ACERVO"
+bucket_name = "bau-acervo"

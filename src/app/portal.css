@@ -1,0 +1,334 @@
+/* Login e portal da cliente */
+
+.modal-dica {
+  font-size: 0.82rem;
+  color: var(--tinta-suave);
+  margin: -6px 0 14px;
+}
+
+.btn-secundario {
+  background: var(--tinta);
+  box-shadow: 0 6px 0 #0f1628;
+  margin-bottom: 12px;
+}
+
+.topbar-entrar {
+  color: var(--branco);
+  margin-left: 12px;
+  white-space: nowrap;
+}
+
+/* Entrar */
+.entrar {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  background: radial-gradient(circle at 80% 10%, #ffe3d6 0, transparent 45%),
+    radial-gradient(circle at 10% 90%, #fff0c7 0, transparent 40%), var(--creme);
+}
+
+.entrar-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--branco);
+  border-radius: 22px;
+  padding: 32px 24px 24px;
+  box-shadow: var(--sombra);
+}
+
+.entrar-card h1 {
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.entrar-marca {
+  display: block;
+  text-align: center;
+  font: 800 1.1rem 'Baloo 2', sans-serif;
+  color: var(--coral);
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+
+.entrar-card label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+}
+
+.entrar-card input {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 13px 14px;
+  border: 2px solid var(--borda);
+  border-radius: 12px;
+  font: 600 1rem 'Nunito', sans-serif;
+}
+
+.entrar-card input:focus {
+  outline: none;
+  border-color: var(--coral);
+}
+
+.entrar-card .btn-buy {
+  animation: none;
+}
+
+.entrar-card a {
+  color: var(--coral);
+  font-weight: 700;
+}
+
+/* Portal */
+.portal {
+  min-height: 100vh;
+}
+
+.portal-topo {
+  background: var(--tinta);
+  color: var(--branco);
+  padding: 14px 0;
+}
+
+.portal-topo-conteudo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.portal-marca {
+  font: 800 1.2rem 'Baloo 2', sans-serif;
+  color: var(--sol);
+}
+
+.portal-usuario {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.portal-usuario .link-btn {
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+.portal-corpo {
+  padding-top: 32px;
+  padding-bottom: 64px;
+}
+
+.portal-boasvindas {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.portal-boasvindas h1 {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+}
+
+.portal-boasvindas p {
+  color: var(--tinta-suave);
+}
+
+.portal-busca {
+  width: 100%;
+  max-width: 560px;
+  padding: 15px 20px;
+  border: 2px solid var(--borda);
+  border-radius: 999px;
+  font: 600 1rem 'Nunito', sans-serif;
+  background: var(--branco);
+  box-shadow: var(--sombra);
+}
+
+.portal-busca:focus {
+  outline: none;
+  border-color: var(--coral);
+}
+
+.portal-h2 {
+  font-size: 1.2rem;
+  text-align: left;
+}
+
+.portal-vazio {
+  text-align: center;
+  background: var(--branco);
+  border-radius: var(--raio);
+  padding: 32px 20px;
+  font-weight: 700;
+  color: var(--tinta-suave);
+}
+
+.migalhas {
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: var(--tinta-suave);
+  overflow-wrap: anywhere;
+}
+
+.migalhas button {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--coral);
+  cursor: pointer;
+}
+
+.migalhas span:last-child button {
+  color: var(--tinta);
+  cursor: default;
+}
+
+.pastas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(150px, 45%), 1fr));
+  gap: 14px;
+}
+
+.pastas-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.pasta-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  background: var(--branco);
+  border: 2px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 18px;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  transition: translate 0.15s, border-color 0.15s;
+}
+
+.pasta-card:hover {
+  translate: 0 -3px;
+  border-color: var(--coral);
+}
+
+.pastas-lista .pasta-card {
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 14px;
+}
+
+.pastas-lista .pasta-card small {
+  margin-left: auto;
+}
+
+.pasta-ico {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.pastas-lista .pasta-ico {
+  width: 34px;
+  height: 34px;
+  font-size: 1rem;
+}
+
+.pasta-nome {
+  font-weight: 800;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.pasta-card small {
+  color: var(--tinta-suave);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.arq-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.arq {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--branco);
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0 3px 10px rgba(31, 42, 68, 0.05);
+}
+
+.arq-ico {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.arq-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.arq-nome {
+  display: block;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.arq-info small {
+  color: var(--tinta-suave);
+  font-size: 0.8rem;
+}
+
+.arq-acoes {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.arq-btn {
+  background: var(--verde);
+  color: var(--branco);
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 8px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.arq-ver {
+  background: var(--creme);
+  color: var(--tinta);
+  border: 2px solid var(--borda);
+  padding: 6px 12px;
+}
+
+@media (max-width: 560px) {
+  .arq {
+    flex-wrap: wrap;
+  }
+  .arq-acoes {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .portal-usuario span {
+    display: none;
+  }
+}

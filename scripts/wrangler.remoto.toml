@@ -1,0 +1,9 @@
+# Usado só pelo scripts/subir-acervo.mjs: aponta o binding para o bucket R2 real,
+# usando o login do `wrangler` (sem precisar de token S3).
+name = "bau-acervo-upload"
+compatibility_date = "2024-09-23"
+
+[[r2_buckets]]
+binding = "ACERVO"
+bucket_name = "bau-acervo"
+remote = true
