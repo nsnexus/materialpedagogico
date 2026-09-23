@@ -24,7 +24,7 @@ const BENEFICIOS = [
 ];
 
 const INCLUSO = [
-  `${SITE.qtdMateriais} materiais pedagógicos`,
+  `${SITE.qtdMateriais} itens pedagógicos`,
   'Acesso vitalício, sem mensalidade',
   'Todas as categorias do acervo',
   'Acesso pelo celular ou computador',
@@ -84,7 +84,7 @@ export default function Home() {
           <div className="hero-texto">
             <span className="selo">{SITE.marca}</span>
             <h1>
-              {SITE.qtdMateriais} materiais{' '}
+              {SITE.qtdMateriais} itens{' '}
               <span className="destaque">
                 prontos pra imprimir
                 <Sublinhado className="sublinhado" />
@@ -139,7 +139,7 @@ export default function Home() {
 
         <div className="wrap numeros">
           <div>
-            <strong>{SITE.qtdMateriais}</strong>arquivos
+            <strong>{SITE.qtdMateriais}</strong>itens
           </div>
           <div>
             <strong>{SITE.categorias.length}</strong>categorias
@@ -384,7 +384,7 @@ export default function Home() {
           </div>
           <h2>Comece a próxima aula com a atividade pronta</h2>
           <p>
-            {SITE.qtdMateriais} materiais por {PRECO}. Uma vez só, pra sempre.
+            {SITE.qtdMateriais} itens por {PRECO}. Uma vez só, pra sempre.
           </p>
           <BuyButton className="btn-xl btn-claro">Quero meu acesso agora</BuyButton>
         </div>

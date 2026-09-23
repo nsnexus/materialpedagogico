@@ -6,7 +6,7 @@ import { SITE } from '@/lib/site';
 export const metadata = {
   // Domínio público, usado para montar a URL absoluta da imagem de compartilhamento.
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3010'),
-  title: `${SITE.marca} | ${SITE.qtdMateriais} materiais pedagógicos`,
+  title: `${SITE.marca} | ${SITE.qtdMateriais} itens pedagógicos`,
   description:
     'Atividades para imprimir, cadernos de colorir, datas comemorativas, fichas e projetos escolares. Pagamento único, acesso vitalício.',
 };

@@ -6,7 +6,7 @@ export const SITE = {
   appId: 'bau-pedagogico',
   preco: 9.99,
   // Número real de arquivos no portal (atualize quando subir material novo).
-  qtdMateriais: '+130',
+  qtdMateriais: '+25.000',
   whatsapp: '', // ex: '5581999999999' — mostra botão de suporte se preenchido
 
   categorias: [

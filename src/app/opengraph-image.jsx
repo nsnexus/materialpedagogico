@@ -3,7 +3,7 @@ import { ImageResponse } from 'next/og';
 import { SITE, formatBRL } from '@/lib/site';
 
 export const runtime = 'edge';
-export const alt = `${SITE.marca}: ${SITE.qtdMateriais} materiais prontos pra imprimir`;
+export const alt = `${SITE.marca}: ${SITE.qtdMateriais} itens prontos pra imprimir`;
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -45,7 +45,7 @@ export default async function OgImage() {
             {SITE.marca.toUpperCase()}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', fontSize: 64, lineHeight: 1.05, color: '#1f2a44', marginTop: 22 }}>
-            <span>{SITE.qtdMateriais} materiais</span>
+            <span>{SITE.qtdMateriais} itens</span>
             <span style={{ color: '#ff6b4a' }}>prontos pra imprimir</span>
           </div>
           <div
