@@ -88,16 +88,27 @@ function CampoPasta({ valor, setValor, pastas, id }) {
   );
 }
 
-const STATUS = { ativa: '🟢 Ativa', bloqueada: '🔴 Bloqueada', pendente: '🟡 Pendente (Pix gerado)' };
+const STATUS = {
+  ativa: { rotulo: 'Ativa', classe: 'badge-ativa' },
+  bloqueada: { rotulo: 'Bloqueada', classe: 'badge-bloqueada' },
+  pendente: { rotulo: 'Pendente (Pix)', classe: 'badge-pendente' },
+};
 
 function SecaoClientes() {
   const [busca, setBusca] = useState('');
+  const [statusFiltro, setStatusFiltro] = useState('todas');
   const [contas, setContas] = useState(null);
   const [cursor, setCursor] = useState(null);
   const [aviso, setAviso] = useState(null); // { tipo, texto, link? }
+  const [modalNovo, setModalNovo] = useState(false);
+  const [novoNome, setNovoNome] = useState('');
+  const [novoEmail, setNovoEmail] = useState('');
+  const [novoZap, setNovoZap] = useState('');
+  const [novaSenha, setNovaSenha] = useState('123456');
+  const [salvandoNovo, setSalvandoNovo] = useState(false);
 
   async function carregar(mais = false) {
-    const qs = new URLSearchParams({ busca });
+    const qs = new URLSearchParams({ busca, status: statusFiltro });
     if (mais && cursor) qs.set('cursor', cursor);
     const res = await fetch(`/api/admin/clientes?${qs}`, { cache: 'no-store' });
     if (res.status === 401) return window.location.reload();
@@ -109,8 +120,7 @@ function SecaoClientes() {
   useEffect(() => {
     const t = setTimeout(() => carregar(), 300);
     return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [busca]);
+  }, [busca, statusFiltro]);
 
   async function agir(c, acao) {
     if (acao === 'bloquear' && !confirm(`Bloquear ${c.email}? Ela perde o acesso na hora, em todos os aparelhos.`)) return;
@@ -125,77 +135,242 @@ function SecaoClientes() {
     if (d.link) {
       setAviso({ tipo: 'ok', texto: `Link de nova senha para ${c.email} (vale 1 hora, uso único):`, link: d.link });
     } else {
-      setAviso({ tipo: 'ok', texto: acao === 'bloquear' ? `${c.email} bloqueada.` : `${c.email} reativada.` });
+      setAviso({
+        tipo: 'ok',
+        texto: acao === 'bloquear' ? `${c.email} bloqueada.` : `${c.email} acesso liberado com sucesso!`,
+      });
     }
     carregar();
+  }
+
+  async function criarClienteManual(e) {
+    e.preventDefault();
+    setSalvandoNovo(true);
+    setAviso(null);
+    try {
+      const res = await fetch('/api/admin/clientes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          acao: 'criar-manual',
+          nome: novoNome,
+          email: novoEmail,
+          whatsapp: novoZap,
+          senha: novaSenha,
+        }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || 'Erro ao cadastrar cliente.');
+      setModalNovo(false);
+      setNovoNome('');
+      setNovoEmail('');
+      setNovoZap('');
+      setNovaSenha('123456');
+      setAviso({ tipo: 'ok', texto: `Cliente ${d.conta.nome} cadastrada e com acesso liberado!` });
+      carregar();
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setSalvandoNovo(false);
+    }
   }
 
   async function copiar(link) {
     try {
       await navigator.clipboard.writeText(link);
-      setAviso((a) => ({ ...a, texto: 'Link copiado! Mande para a cliente pelo WhatsApp.' }));
+      setAviso((a) => ({ ...a, texto: 'Link copiado! Envie para a cliente no WhatsApp.' }));
     } catch (e) {}
   }
+
+  function linkZap(c) {
+    const raw = String(c.whatsapp || '').replace(/\D/g, '');
+    if (!raw) return null;
+    const num = raw.length === 10 || raw.length === 11 ? `55${raw}` : raw;
+    const siteUrl = typeof window !== 'undefined' ? window.location.origin : '';
+    const msg =
+      c.status === 'pendente'
+        ? `Olá ${c.nome || ''}! Vi que você gerou o Pix para o Baú Pedagógico. Ficou alguma dúvida sobre o material ou precisa de ajuda para concluir seu acesso?`
+        : `Olá ${c.nome || ''}! Seu acesso ao Baú Pedagógico está liberado! Você pode entrar pelo link: ${siteUrl}/entrar com seu e-mail ${c.email} e a senha que escolheu.`;
+    return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+  }
+
+  const contagem = useMemo(() => {
+    if (!contas) return { total: 0, ativas: 0, pendentes: 0, bloqueadas: 0 };
+    return {
+      total: contas.length,
+      ativas: contas.filter((c) => c.status === 'ativa').length,
+      pendentes: contas.filter((c) => c.status === 'pendente').length,
+      bloqueadas: contas.filter((c) => c.status === 'bloqueada').length,
+    };
+  }, [contas]);
 
   return (
     <section className="admin-card">
       <div className="admin-lista-topo">
-        <h2 className="portal-h2">Clientes</h2>
+        <div>
+          <h2 className="portal-h2" style={{ textAlign: 'left', marginBottom: '4px' }}>
+            Clientes & Acessos
+          </h2>
+          <small className="admin-ajuda">Gerencie alunas, envie mensagens no WhatsApp ou libere acessos manualmente.</small>
+        </div>
+        <button className="btn-buy" style={{ padding: '9px 18px', fontSize: '0.88rem' }} onClick={() => setModalNovo(true)}>
+          ＋ Liberar Novo Cliente
+        </button>
+      </div>
+
+      {/* Modal de cadastro manual */}
+      {modalNovo && (
+        <div className="modal-fundo" onClick={() => setModalNovo(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-fechar" onClick={() => setModalNovo(false)}>
+              ×
+            </button>
+            <h3>Liberar Acesso Manual</h3>
+            <p className="modal-sub">Cadastre uma cliente e libere o acesso na hora (cortesia ou compra por fora).</p>
+            <form onSubmit={criarClienteManual}>
+              <label>
+                Nome da cliente
+                <input value={novoNome} onChange={(e) => setNovoNome(e.target.value)} required placeholder="Ex: Maria Silva" />
+              </label>
+              <label>
+                E-mail
+                <input type="email" value={novoEmail} onChange={(e) => setNovoEmail(e.target.value)} required placeholder="maria@email.com" />
+              </label>
+              <label>
+                WhatsApp (opcional)
+                <input value={novoZap} onChange={(e) => setNovoZap(e.target.value)} placeholder="(81) 99999-9999" />
+              </label>
+              <label>
+                Senha inicial
+                <input value={novaSenha} onChange={(e) => setNovaSenha(e.target.value)} required minLength={6} />
+              </label>
+              <button className="btn-buy btn-full" disabled={salvandoNovo}>
+                {salvandoNovo ? 'Liberando acesso…' : 'Cadastrar e Liberar'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Abas de filtro por status */}
+      <div className="admin-filtros-status">
+        <button
+          className={statusFiltro === 'todas' ? 'filtro-pill ativa' : 'filtro-pill'}
+          onClick={() => setStatusFiltro('todas')}
+        >
+          Todas ({contagem.total})
+        </button>
+        <button
+          className={statusFiltro === 'pendente' ? 'filtro-pill ativa' : 'filtro-pill'}
+          onClick={() => setStatusFiltro('pendente')}
+        >
+          🟡 Pendentes ({contagem.pendentes})
+        </button>
+        <button
+          className={statusFiltro === 'ativa' ? 'filtro-pill ativa' : 'filtro-pill'}
+          onClick={() => setStatusFiltro('ativa')}
+        >
+          🟢 Ativas ({contagem.ativas})
+        </button>
+        <button
+          className={statusFiltro === 'bloqueada' ? 'filtro-pill ativa' : 'filtro-pill'}
+          onClick={() => setStatusFiltro('bloqueada')}
+        >
+          🔴 Bloqueadas ({contagem.bloqueadas})
+        </button>
         <input
           className="admin-filtro"
           type="search"
-          placeholder="Buscar pelo começo do e-mail…"
+          placeholder="Buscar por e-mail ou nome…"
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
+          style={{ marginLeft: 'auto' }}
         />
       </div>
+
       {aviso && (
-        <div className={aviso.tipo === 'ok' ? 'admin-ok' : 'modal-erro'}>
+        <div className={aviso.tipo === 'ok' ? 'admin-ok' : 'modal-erro'} style={{ margin: '14px 0' }}>
           <p>{aviso.texto}</p>
           {aviso.link && (
             <div className="admin-link-gerado">
               <code>{aviso.link}</code>
               <button className="arq-btn" onClick={() => copiar(aviso.link)}>
-                Copiar
+                Copiar link
               </button>
             </div>
           )}
         </div>
       )}
-      {!contas && <p>Carregando…</p>}
-      {contas?.length === 0 && <p className="admin-ajuda">Nenhuma cliente encontrada.</p>}
-      <ul className="admin-lista">
-        {contas?.map((c) => (
-          <li key={c.email}>
-            <div className="admin-item-info">
-              <span>{c.nome}</span>
-              <small>
-                {c.email} · {STATUS[c.status] || c.status}
-                {c.criadoEm && ` · desde ${new Date(c.criadoEm).toLocaleDateString('pt-BR')}`}
-              </small>
-            </div>
-            <div className="admin-acoes">
-              {c.status === 'ativa' && (
-                <button className="admin-botao" onClick={() => agir(c, 'link-senha')}>
-                  Link de senha
-                </button>
-              )}
-              {c.status === 'ativa' ? (
-                <button className="admin-excluir" onClick={() => agir(c, 'bloquear')}>
-                  Bloquear
-                </button>
-              ) : (
-                <button className="admin-botao" onClick={() => agir(c, 'reativar')}>
-                  {c.status === 'pendente' ? 'Ativar acesso' : 'Reativar'}
-                </button>
-              )}
-            </div>
-          </li>
-        ))}
+
+      {!contas && <p style={{ marginTop: '16px' }}>Carregando clientes…</p>}
+      {contas?.length === 0 && <p className="admin-ajuda" style={{ marginTop: '16px' }}>Nenhuma cliente encontrada com esse filtro.</p>}
+
+      <ul className="admin-lista" style={{ marginTop: '12px' }}>
+        {contas?.map((c) => {
+          const badge = STATUS[c.status] || { rotulo: c.status, classe: '' };
+          const zapUrl = linkZap(c);
+          return (
+            <li key={c.email} style={{ padding: '12px 6px', alignItems: 'center' }}>
+              <div className="admin-item-info">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                  <strong style={{ fontSize: '1.02rem' }}>{c.nome || 'Sem nome'}</strong>
+                  <span className={`status-badge ${badge.classe}`}>{badge.rotulo}</span>
+                </div>
+                <small style={{ display: 'block', marginTop: '3px', color: '#555' }}>
+                  📧 {c.email}
+                  {c.whatsapp && (
+                    <span style={{ marginLeft: '8px', color: '#16a864', fontWeight: 'bold' }}>
+                      📱 {c.whatsapp}
+                    </span>
+                  )}
+                  {c.criadoEm && ` · Cadastro: ${new Date(c.criadoEm).toLocaleDateString('pt-BR')}`}
+                  {c.pagoEm && ` · Pago: ${new Date(c.pagoEm).toLocaleDateString('pt-BR')}`}
+                </small>
+              </div>
+
+              <div className="admin-acoes">
+                {zapUrl && (
+                  <a
+                    href={zapUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="admin-botao-zap"
+                    title="Conversar com a cliente no WhatsApp"
+                  >
+                    💬 WhatsApp
+                  </a>
+                )}
+
+                {c.status === 'pendente' && (
+                  <button className="admin-botao-liberar" onClick={() => agir(c, 'liberar-manual')} title="Ativar acesso manualmente">
+                    ⚡ Liberar Manual
+                  </button>
+                )}
+
+                {c.status === 'ativa' && (
+                  <button className="admin-botao" onClick={() => agir(c, 'link-senha')} title="Gerar link temporário para ela redefinir a senha">
+                    🔑 Link de senha
+                  </button>
+                )}
+
+                {c.status === 'ativa' ? (
+                  <button className="admin-excluir" onClick={() => agir(c, 'bloquear')} title="Suspender o acesso da cliente">
+                    Bloquear
+                  </button>
+                ) : c.status === 'bloqueada' ? (
+                  <button className="admin-botao" onClick={() => agir(c, 'reativar')}>
+                    Desbloquear
+                  </button>
+                ) : null}
+              </div>
+            </li>
+          );
+        })}
       </ul>
+
       {cursor && (
-        <button className="link-btn" onClick={() => carregar(true)}>
-          Carregar mais
+        <button className="link-btn" style={{ marginTop: '16px' }} onClick={() => carregar(true)}>
+          Carregar mais clientes
         </button>
       )}
     </section>

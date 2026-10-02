@@ -19,6 +19,7 @@ export async function POST(req) {
   const nome = String(body.nome || '').trim().slice(0, 120);
   const email = normalizarEmail(body.email);
   const senha = String(body.senha || '');
+  const whatsapp = String(body.whatsapp || '').replace(/\D/g, '').slice(0, 15);
   if (nome.length < 2) return NextResponse.json({ error: 'Informe seu nome.' }, { status: 400 });
   if (!EMAIL_RE.test(email)) return NextResponse.json({ error: 'Informe um e-mail válido.' }, { status: 400 });
   if (senha.length < 6 || senha.length > 128) {
@@ -45,7 +46,7 @@ export async function POST(req) {
       externalOrderId,
       amount: SITE.preco,
       description: `${SITE.marca} - acesso vitalício`,
-      payer: { name: nome, email },
+      payer: { name: nome, email, phone: whatsapp || undefined },
       webhookUrl,
     });
 
@@ -53,6 +54,7 @@ export async function POST(req) {
     const contaPendente = {
       nome,
       email,
+      whatsapp,
       senhaHash: hash,
       salt,
       status: 'pendente',
@@ -64,7 +66,7 @@ export async function POST(req) {
     await salvarConta(contaPendente);
 
     // Registra pedido para compatibilidade com a notificação de vendas
-    await registrarPedido(charge.txid, { nome, email, senhaHash: hash, salt });
+    await registrarPedido(charge.txid, { nome, email, whatsapp, senhaHash: hash, salt });
 
     const res = NextResponse.json({ txid: charge.txid, pixCopiaECola: charge.pixCopiaECola, amount: charge.amount });
     // Só o navegador que gerou o Pix recebe a sessão quando ele for pago.

@@ -22,11 +22,19 @@ function salvarPedido(pedido) {
   } catch (e) {}
 }
 
+function formatarTelefone(v) {
+  const d = String(v || '').replace(/\D/g, '').slice(0, 11);
+  if (d.length <= 2) return d;
+  if (d.length <= 7) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+}
+
 export default function Checkout() {
   const [aberto, setAberto] = useState(false);
   const [etapa, setEtapa] = useState('form'); // form | pix | pago
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
   const [erro, setErro] = useState('');
   const [enviando, setEnviando] = useState(false);
   const [pix, setPix] = useState(null); // { txid, pixCopiaECola, qr }
@@ -84,7 +92,7 @@ export default function Checkout() {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome, email, senha }),
+        body: JSON.stringify({ nome, email, senha, whatsapp }),
       });
       const data = await res.json();
       if (data.jaTemAcesso) setJaTemAcesso(true);
@@ -140,6 +148,17 @@ export default function Checkout() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
+              />
+            </label>
+            <label>
+              WhatsApp (com DDD)
+              <input
+                type="tel"
+                value={whatsapp}
+                onChange={(e) => setWhatsapp(formatarTelefone(e.target.value))}
+                required
+                placeholder="(00) 00000-0000"
+                autoComplete="tel"
               />
             </label>
             <label>

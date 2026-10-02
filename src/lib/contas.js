@@ -29,10 +29,33 @@ export async function ativarConta(pedido, txid) {
   const dadosBase = existente?.senhaHash ? existente : (pedido.conta || {});
   const conta = {
     ...dadosBase,
+    whatsapp: existente?.whatsapp || pedido.whatsapp || pedido.conta?.whatsapp || '',
     status: 'ativa',
     txid: txid || existente?.txid,
     criadoEm: existente?.criadoEm || new Date().toISOString(),
     pagoEm: new Date().toISOString(),
+  };
+  await salvarConta(conta);
+  return conta;
+}
+
+// Criação direta e manual de cliente pelo painel administrativo
+export async function criarContaManual({ nome, email, whatsapp, senhaHash, salt }) {
+  const normEmail = normalizarEmail(email);
+  const existente = await getConta(normEmail);
+  const agora = new Date().toISOString();
+  const conta = {
+    nome: String(nome || '').trim(),
+    email: normEmail,
+    whatsapp: String(whatsapp || '').replace(/\D/g, ''),
+    senhaHash,
+    salt,
+    status: 'ativa',
+    txid: `MANUAL_${Date.now()}`,
+    origem: 'admin',
+    criadoEm: existente?.criadoEm || agora,
+    pagoEm: agora,
+    atualizadoEm: agora,
   };
   await salvarConta(conta);
   return conta;
@@ -52,7 +75,17 @@ export async function listarContas(prefixo = '', cursor) {
   const pagina = await store().list({ prefix: `conta:${normalizarEmail(prefixo)}`, limit: 50, cursor: cursor || undefined });
   const contas = await Promise.all(pagina.keys.map((k) => store().get(k.name, 'json')));
   return {
-    contas: contas.filter(Boolean).map(({ nome, email, status, criadoEm }) => ({ nome, email, status, criadoEm })),
+    contas: contas
+      .filter(Boolean)
+      .map(({ nome, email, whatsapp, status, criadoEm, pagoEm, txid }) => ({
+        nome,
+        email,
+        whatsapp: whatsapp || '',
+        status,
+        criadoEm,
+        pagoEm: pagoEm || null,
+        txid: txid || null,
+      })),
     cursor: pagina.list_complete ? null : pagina.cursor,
   };
 }
