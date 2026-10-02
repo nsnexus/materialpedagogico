@@ -8,7 +8,7 @@ const FAKE_PAGA_EM = 8000;
 
 function config() {
   return {
-    gatewayUrl: variavel('NSNEXUS_GATEWAY_URL') || 'https://nsmusic.nsnexus.com.br',
+    gatewayUrl: variavel('NSNEXUS_GATEWAY_URL') || 'https://nsmusic.ia.br',
     apiKey: variavel('NSNEXUS_GATEWAY_API_KEY'),
   };
 }
