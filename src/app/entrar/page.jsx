@@ -32,8 +32,9 @@ export default function Entrar() {
   return (
     <main className="entrar">
       <form className="entrar-card" onSubmit={entrar}>
-        <Link href="/" className="entrar-marca">
-          🧰 {SITE.marca}
+        <Link href="/" className="entrar-marca" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+          <img src="/logo.png" alt="Baú Pedagógico" width={38} height={38} style={{ borderRadius: '50%', objectFit: 'cover' }} />
+          <span>{SITE.marca}</span>
         </Link>
         <h1>Entrar no portal</h1>
         <p className="modal-sub">Use o e-mail e a senha que você criou na compra.</p>

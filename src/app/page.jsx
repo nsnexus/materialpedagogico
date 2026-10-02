@@ -68,12 +68,48 @@ export default function Home() {
 
   return (
     <>
-      <div className="topbar">
-        🎒 Oferta de lançamento: acesso vitalício por apenas {PRECO}
-        <a href="/entrar" className="topbar-entrar">
-          Já comprei · Entrar
-        </a>
+      <div className="top-banner">
+        <div className="wrap top-banner-wrap">
+          <span className="top-banner-badge">✨ OFERTA DE LANÇAMENTO</span>
+          <span className="top-banner-texto">
+            Acesso vitalício ao baú completo (+25.000 materiais) por apenas <strong>{PRECO}</strong>
+          </span>
+          <a href="/entrar" className="top-banner-link">
+            Já sou cliente · Entrar →
+          </a>
+        </div>
       </div>
+
+      <nav className="site-header">
+        <div className="wrap site-nav-wrap">
+          <a href="#" className="site-brand" aria-label="Baú Pedagógico - Início">
+            <img src="/logo.png" alt="Baú Pedagógico" width={48} height={48} className="site-logo-img" />
+            <div className="site-brand-text">
+              <span className="site-brand-nome">{SITE.marca}</span>
+              <span className="site-brand-sub">Acervo Educativo</span>
+            </div>
+          </a>
+
+          <div className="site-nav-links">
+            <a href="#materiais" className="site-nav-link">O que inclui</a>
+            <a href="#beneficios" className="site-nav-link">Vantagens</a>
+            {bonus.length > 0 && <a href="#bonus" className="site-nav-link">Bônus</a>}
+            {autora.nome && <a href="#autora" className="site-nav-link">Autora</a>}
+            {depoimentos.length > 0 && <a href="#depoimentos" className="site-nav-link">Depoimentos</a>}
+            <a href="#faq" className="site-nav-link">Dúvidas</a>
+          </div>
+
+          <div className="site-nav-acoes">
+            <a href="/entrar" className="btn-nav-login" title="Acessar meu portal">
+              <span className="btn-nav-ico">🔑</span>
+              <span>Entrar</span>
+            </a>
+            <BuyButton className="btn-nav-comprar">
+              <span>Garantir Acesso</span>
+            </BuyButton>
+          </div>
+        </div>
+      </nav>
 
       <header className="hero">
         <Estrela className="deco deco-estrela-1" />
@@ -155,7 +191,7 @@ export default function Home() {
 
       <Onda de={COR.creme} para={COR.branco} />
 
-      <section className="secao secao-branca">
+      <section className="secao secao-branca" id="materiais">
         <div className="wrap">
           <p className="sobretitulo">espia só 👀</p>
           <h2>Um pouquinho do que tem dentro do baú</h2>
@@ -215,12 +251,13 @@ export default function Home() {
 
       <Onda de={COR.tinta} para={COR.creme} />
 
-      <section className="secao">
+      <section className="secao" id="beneficios">
         <div className="wrap solucao-grid">
           <div className="celular" aria-hidden="true">
             <div className="celular-tela">
-              <div className="celular-topo">
-                <span>🧰</span> {SITE.marca}
+              <div className="celular-topo" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                <img src="/logo.png" alt="" width={20} height={20} style={{ borderRadius: '50%' }} />
+                <span>{SITE.marca}</span>
               </div>
               {PASTAS.map(([ico, nome, cor]) => (
                 <div className="celular-pasta" key={nome}>
@@ -269,7 +306,7 @@ export default function Home() {
       </section>
 
       {bonus.length > 0 && (
-        <section className="secao secao-bonus">
+        <section className="secao secao-bonus" id="bonus">
           <div className="wrap">
             <h2>🎁 Bônus inclusos</h2>
             <div className="grid-3">
@@ -286,7 +323,7 @@ export default function Home() {
       )}
 
       {autora.nome && (
-        <section className="secao secao-autora">
+        <section className="secao secao-autora" id="autora">
           <div className="wrap autora">
             {autora.foto && (
               <div className="autora-polaroid">
@@ -318,7 +355,7 @@ export default function Home() {
       )}
 
       {depoimentos.length > 0 && (
-        <section className="secao secao-depo">
+        <section className="secao secao-depo" id="depoimentos">
           <div className="wrap">
             <h2>O que dizem as professoras</h2>
             <div className="grid-3">
@@ -363,7 +400,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="secao secao-faq">
+      <section className="secao secao-faq" id="faq">
         <div className="wrap estreito">
           <h2>Perguntas frequentes</h2>
           {SITE.faq.map((f) => (

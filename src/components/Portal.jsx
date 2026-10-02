@@ -121,7 +121,10 @@ export default function Portal({ nome }) {
     <div className="portal">
       <header className="portal-topo">
         <div className="wrap portal-topo-conteudo">
-          <span className="portal-marca">🧰 {SITE.marca}</span>
+          <span className="portal-marca" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            <img src="/logo.png" alt="Baú Pedagógico" width={32} height={32} style={{ borderRadius: '50%', objectFit: 'cover' }} />
+            <span>{SITE.marca}</span>
+          </span>
           <div className="portal-usuario">
             <span>Olá, {nome}!</span>
             <form action="/api/sair" method="post">

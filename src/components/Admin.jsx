@@ -38,7 +38,10 @@ export function AdminLogin() {
   return (
     <main className="entrar">
       <form className="entrar-card" onSubmit={entrar}>
-        <span className="entrar-marca">🧰 {SITE.marca}</span>
+        <span className="entrar-marca" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+          <img src="/logo.png" alt="Baú Pedagógico" width={38} height={38} style={{ borderRadius: '50%', objectFit: 'cover' }} />
+          <span>{SITE.marca}</span>
+        </span>
         <h1>Painel administrativo</h1>
         <label>
           E-mail do administrador
@@ -293,7 +296,10 @@ export function AdminPainel() {
     <div className="portal">
       <header className="portal-topo">
         <div className="wrap portal-topo-conteudo">
-          <span className="portal-marca">🧰 Painel · {SITE.marca}</span>
+          <span className="portal-marca" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            <img src="/logo.png" alt="Baú Pedagógico" width={32} height={32} style={{ borderRadius: '50%', objectFit: 'cover' }} />
+            <span>Painel · {SITE.marca}</span>
+          </span>
           <div className="portal-usuario">
             <a href="/portal" className="admin-link-topo">
               Ver portal
