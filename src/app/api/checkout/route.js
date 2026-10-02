@@ -2,8 +2,9 @@ import { NextResponse } from 'next/server';
 import { createPixCharge } from '@/lib/pay';
 import { SITE } from '@/lib/site';
 import { registrarPedido } from '@/lib/vendas';
-import { EMAIL_RE, getConta, normalizarEmail } from '@/lib/contas';
+import { EMAIL_RE, getConta, normalizarEmail, salvarConta } from '@/lib/contas';
 import { COOKIE_PEDIDO, hashSenha, opcoesCookie } from '@/lib/auth';
+import { urlDoSite } from '@/lib/email';
 
 export const runtime = 'edge';
 
@@ -33,18 +34,36 @@ export async function POST(req) {
       );
     }
 
-    // Valor vem sempre do servidor, nunca do cliente.
+    const { hash, salt } = await hashSenha(senha);
     const externalOrderId = `BP-${Date.now().toString(36)}-${crypto.randomUUID().slice(0, 8)}`;
+    const baseUrl = urlDoSite(req);
+    const webhookUrl = baseUrl && !baseUrl.includes('localhost') ? `${baseUrl.replace(/\/$/, '')}/api/webhooks/payment` : undefined;
+
+    // Valor vem sempre do servidor, nunca do cliente.
     const charge = await createPixCharge({
       appId: SITE.appId,
       externalOrderId,
       amount: SITE.preco,
       description: `${SITE.marca} - acesso vitalício`,
       payer: { name: nome, email },
+      webhookUrl,
     });
 
-    // A conta só é criada quando este Pix for pago (ver /api/status).
-    const { hash, salt } = await hashSenha(senha);
+    // A conta já é criada imediatamente no banco como pendente
+    const contaPendente = {
+      nome,
+      email,
+      senhaHash: hash,
+      salt,
+      status: 'pendente',
+      txid: charge.txid,
+      externalOrderId,
+      criadoEm: existente?.criadoEm || new Date().toISOString(),
+      atualizadoEm: new Date().toISOString(),
+    };
+    await salvarConta(contaPendente);
+
+    // Registra pedido para compatibilidade com a notificação de vendas
     await registrarPedido(charge.txid, { nome, email, senhaHash: hash, salt });
 
     const res = NextResponse.json({ txid: charge.txid, pixCopiaECola: charge.pixCopiaECola, amount: charge.amount });

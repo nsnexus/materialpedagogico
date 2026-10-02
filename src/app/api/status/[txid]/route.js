@@ -24,7 +24,12 @@ export async function GET(req, { params }) {
     if (!pago) return NextResponse.json({ status: 'PENDING' });
 
     const pedido = await getPedido(txid);
-    const conta = pedido?.conta ? await ativarConta(pedido, txid) : null;
+    const emailPagador = charge.payer?.email;
+    const conta = pedido
+      ? await ativarConta(pedido, txid)
+      : emailPagador
+      ? await ativarConta({ email: emailPagador }, txid)
+      : null;
     await registrarVenda(txid).catch((e) => console.warn('[status] vendas:', e.message));
 
     const res = NextResponse.json({ status: 'PAID' });

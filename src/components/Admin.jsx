@@ -85,7 +85,7 @@ function CampoPasta({ valor, setValor, pastas, id }) {
   );
 }
 
-const STATUS = { ativa: '🟢 Ativa', bloqueada: '🔴 Bloqueada' };
+const STATUS = { ativa: '🟢 Ativa', bloqueada: '🔴 Bloqueada', pendente: '🟡 Pendente (Pix gerado)' };
 
 function SecaoClientes() {
   const [busca, setBusca] = useState('');
@@ -183,7 +183,7 @@ function SecaoClientes() {
                 </button>
               ) : (
                 <button className="admin-botao" onClick={() => agir(c, 'reativar')}>
-                  Reativar
+                  {c.status === 'pendente' ? 'Ativar acesso' : 'Reativar'}
                 </button>
               )}
             </div>

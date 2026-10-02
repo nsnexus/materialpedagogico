@@ -21,11 +21,19 @@ export async function salvarConta(conta) {
   await store().put(`conta:${conta.email}`, JSON.stringify(conta));
 }
 
-// Cria a conta com os dados do pedido pago. Conta já ativa não é alterada.
+// Cria ou ativa a conta com os dados do pedido pago. Conta já ativa não é alterada.
 export async function ativarConta(pedido, txid) {
-  const existente = await getConta(pedido.email);
+  const email = normalizarEmail(pedido.email || pedido.conta?.email);
+  const existente = await getConta(email);
   if (existente?.status === 'ativa') return existente;
-  const conta = { ...pedido.conta, status: 'ativa', txid, criadoEm: new Date().toISOString() };
+  const dadosBase = existente?.senhaHash ? existente : (pedido.conta || {});
+  const conta = {
+    ...dadosBase,
+    status: 'ativa',
+    txid: txid || existente?.txid,
+    criadoEm: existente?.criadoEm || new Date().toISOString(),
+    pagoEm: new Date().toISOString(),
+  };
   await salvarConta(conta);
   return conta;
 }

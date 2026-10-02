@@ -13,7 +13,7 @@ function config() {
   };
 }
 
-export async function createPixCharge({ appId, externalOrderId, amount, description, payer }) {
+export async function createPixCharge({ appId, externalOrderId, amount, description, payer, webhookUrl }) {
   if (FAKE()) {
     return { txid: `DEVFAKE${Date.now()}`, pixCopiaECola: '00020126-PIX-DE-TESTE-DEV', amount, appId };
   }
@@ -23,7 +23,7 @@ export async function createPixCharge({ appId, externalOrderId, amount, descript
   const res = await fetch(`${gatewayUrl}/api/gateway/v1/charges`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-Gateway-Api-Key': apiKey },
-    body: JSON.stringify({ appId, externalOrderId, amount, description, payer }),
+    body: JSON.stringify({ appId, externalOrderId, amount, description, payer, webhookUrl }),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
