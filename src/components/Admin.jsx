@@ -16,6 +16,7 @@ function quando(ts) {
 }
 
 export function AdminLogin() {
+  const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
   const [enviando, setEnviando] = useState(false);
@@ -27,7 +28,7 @@ export function AdminLogin() {
     const res = await fetch('/api/admin/entrar', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ senha }),
+      body: JSON.stringify({ email, senha }),
     });
     if (res.ok) return window.location.reload();
     setErro((await res.json().catch(() => ({}))).error || 'Não foi possível entrar.');
@@ -40,8 +41,19 @@ export function AdminLogin() {
         <span className="entrar-marca">🧰 {SITE.marca}</span>
         <h1>Painel administrativo</h1>
         <label>
+          E-mail do administrador
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="narcisofelizardo@gmail.com"
+            required
+            autoFocus
+          />
+        </label>
+        <label>
           Senha do painel
-          <input type="password" value={senha} onChange={(e) => setSenha(e.target.value)} required autoFocus />
+          <input type="password" value={senha} onChange={(e) => setSenha(e.target.value)} required />
         </label>
         {erro && <p className="modal-erro">{erro}</p>}
         <button className="btn-buy btn-full" disabled={enviando}>

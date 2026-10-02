@@ -88,12 +88,23 @@ export async function gravarSessao(res, conta) {
   res.cookies.set(COOKIE_SESSAO, await criarTokenSessao(conta), opcoesCookie(SESSAO_DIAS * 86400));
 }
 
-// --- Admin: senha única em ADMIN_PASSWORD, sessão de 7 dias em cookie próprio ---
+// --- Admin: autenticação via ADMIN_EMAIL e ADMIN_PASSWORD, sessão de 7 dias em cookie próprio ---
 export const COOKIE_ADMIN = 'bp_admin';
 const ADMIN_DIAS = 7;
 
+export async function conferirLoginAdmin(email, senha) {
+  const emailEsperado = (variavel('ADMIN_EMAIL') || 'narcisofelizardo@gmail.com').trim().toLowerCase();
+  const senhaEsperada = variavel('ADMIN_PASSWORD') || 'Filipe@18122026';
+
+  if (!email || !senha) return false;
+  if (String(email).trim().toLowerCase() !== emailEsperado) return false;
+
+  const h = async (s) => b64url(await crypto.subtle.digest('SHA-256', enc.encode(s)));
+  return iguais(await h(senha), await h(senhaEsperada));
+}
+
 export async function conferirSenhaAdmin(senha) {
-  const certa = variavel('ADMIN_PASSWORD');
+  const certa = variavel('ADMIN_PASSWORD') || 'Filipe@18122026';
   if (!certa) return false;
   // Compara os hashes para não vazar o tamanho da senha pelo tempo de resposta.
   const h = async (s) => b64url(await crypto.subtle.digest('SHA-256', enc.encode(s)));
