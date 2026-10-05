@@ -39,6 +39,8 @@ export default function Checkout() {
   const [enviando, setEnviando] = useState(false);
   const [pix, setPix] = useState(null); // { txid, pixCopiaECola, qr }
   const [senha, setSenha] = useState('');
+  const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [pedidoPendente, setPedidoPendente] = useState(null);
   const [jaTemAcesso, setJaTemAcesso] = useState(false);
   const [copiado, setCopiado] = useState(false);
   const timer = useRef(null);
@@ -46,13 +48,19 @@ export default function Checkout() {
   useEffect(() => {
     const abrir = () => {
       setAberto(true);
-      // Cliente que fechou a aba com um Pix pendente volta para o mesmo QR.
+      setErro('');
+      // Sempre abre no formulário de cadastro primeiro
+      setEtapa('form');
       const salvo = lerPedido();
-      if (salvo?.txid && etapa === 'form') mostrarPix(salvo);
+      if (salvo?.txid) {
+        setPedidoPendente(salvo);
+      } else {
+        setPedidoPendente(null);
+      }
     };
     window.addEventListener('abrir-checkout', abrir);
     return () => window.removeEventListener('abrir-checkout', abrir);
-  }, [etapa]);
+  }, []);
 
   useEffect(() => {
     if (etapa !== 'pix' || !pix?.txid) return;
@@ -87,6 +95,16 @@ export default function Checkout() {
     e.preventDefault();
     setErro('');
     setJaTemAcesso(false);
+
+    if (senha.length < 6) {
+      setErro('A senha deve ter no mínimo 6 caracteres.');
+      return;
+    }
+    if (senha !== confirmarSenha) {
+      setErro('As senhas não coincidem. Digite a mesma senha nos dois campos.');
+      return;
+    }
+
     setEnviando(true);
     try {
       const res = await fetch('/api/checkout', {
@@ -99,6 +117,7 @@ export default function Checkout() {
       if (!res.ok) throw new Error(data.error || 'Erro ao gerar Pix.');
       const pedido = { txid: data.txid, pixCopiaECola: data.pixCopiaECola };
       salvarPedido(pedido);
+      setPedidoPendente(null);
       await mostrarPix(pedido);
     } catch (err) {
       setErro(err.message);
@@ -117,6 +136,7 @@ export default function Checkout() {
 
   function novoPedido() {
     salvarPedido(null);
+    setPedidoPendente(null);
     setPix(null);
     setEtapa('form');
   }
@@ -136,9 +156,41 @@ export default function Checkout() {
             <p className="modal-sub">
               {SITE.marca} · acesso vitalício por <strong>{formatBRL(SITE.preco)}</strong>
             </p>
+
+            {pedidoPendente && (
+              <div className="checkout-aviso-pendente">
+                <span>Você tem um Pix gerado recentemente.</span>
+                <div className="checkout-aviso-acoes">
+                  <button
+                    type="button"
+                    className="checkout-link-destaque"
+                    onClick={() => mostrarPix(pedidoPendente)}
+                  >
+                    Ver QR Code pendente →
+                  </button>
+                  <button
+                    type="button"
+                    className="checkout-link-descartar"
+                    onClick={() => {
+                      salvarPedido(null);
+                      setPedidoPendente(null);
+                    }}
+                  >
+                    Descartar
+                  </button>
+                </div>
+              </div>
+            )}
+
             <label>
-              Seu nome
-              <input value={nome} onChange={(e) => setNome(e.target.value)} required autoComplete="name" />
+              Seu nome completo
+              <input
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                required
+                autoComplete="name"
+                placeholder="Ex: Maria Silva"
+              />
             </label>
             <label>
               Seu e-mail
@@ -148,6 +200,7 @@ export default function Checkout() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
+                placeholder="seuemail@exemplo.com"
               />
             </label>
             <label>
@@ -173,6 +226,18 @@ export default function Checkout() {
                 placeholder="mínimo 6 caracteres"
               />
             </label>
+            <label>
+              Confirme sua senha
+              <input
+                type="password"
+                value={confirmarSenha}
+                onChange={(e) => setConfirmarSenha(e.target.value)}
+                required
+                minLength={6}
+                autoComplete="new-password"
+                placeholder="digite a mesma senha"
+              />
+            </label>
             <p className="modal-dica">Com esse e-mail e senha você entra no portal dos materiais sempre que quiser.</p>
             {erro && <p className="modal-erro">{erro}</p>}
             {jaTemAcesso && (
@@ -181,7 +246,7 @@ export default function Checkout() {
               </a>
             )}
             <button className="btn-buy btn-full" disabled={enviando}>
-              {enviando ? 'Gerando Pix…' : 'Gerar Pix'}
+              {enviando ? 'Gerando Pix…' : 'Gerar Pix e Acessar'}
             </button>
             <p className="modal-nota">🔒 Pagamento via Pix. Liberação automática.</p>
           </form>
