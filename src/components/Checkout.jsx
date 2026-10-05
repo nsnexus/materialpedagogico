@@ -182,62 +182,69 @@ export default function Checkout() {
               </div>
             )}
 
-            <label>
-              Seu nome completo
-              <input
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                required
-                autoComplete="name"
-                placeholder="Ex: Maria Silva"
-              />
-            </label>
-            <label>
-              Seu e-mail
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                autoComplete="email"
-                placeholder="seuemail@exemplo.com"
-              />
-            </label>
-            <label>
-              WhatsApp (com DDD)
-              <input
-                type="tel"
-                value={whatsapp}
-                onChange={(e) => setWhatsapp(formatarTelefone(e.target.value))}
-                required
-                placeholder="(00) 00000-0000"
-                autoComplete="tel"
-              />
-            </label>
-            <label>
-              Crie uma senha
-              <input
-                type="password"
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)}
-                required
-                minLength={6}
-                autoComplete="new-password"
-                placeholder="mínimo 6 caracteres"
-              />
-            </label>
-            <label>
-              Confirme sua senha
-              <input
-                type="password"
-                value={confirmarSenha}
-                onChange={(e) => setConfirmarSenha(e.target.value)}
-                required
-                minLength={6}
-                autoComplete="new-password"
-                placeholder="digite a mesma senha"
-              />
-            </label>
+            <div className="checkout-grid">
+              <label className="checkout-grid-full">
+                Seu nome completo
+                <input
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                  required
+                  autoComplete="name"
+                  placeholder="Ex: Maria Silva"
+                />
+              </label>
+
+              <label>
+                Seu e-mail
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                  placeholder="seuemail@exemplo.com"
+                />
+              </label>
+
+              <label>
+                WhatsApp (com DDD)
+                <input
+                  type="tel"
+                  value={whatsapp}
+                  onChange={(e) => setWhatsapp(formatarTelefone(e.target.value))}
+                  required
+                  placeholder="(00) 00000-0000"
+                  autoComplete="tel"
+                />
+              </label>
+
+              <label>
+                Crie uma senha
+                <input
+                  type="password"
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
+                  required
+                  minLength={6}
+                  autoComplete="new-password"
+                  placeholder="mínimo 6 caracteres"
+                />
+              </label>
+
+              <label>
+                Confirme sua senha
+                <input
+                  type="password"
+                  value={confirmarSenha}
+                  onChange={(e) => setConfirmarSenha(e.target.value)}
+                  required
+                  minLength={6}
+                  autoComplete="new-password"
+                  placeholder="digite a mesma senha"
+                />
+              </label>
+            </div>
+
             <p className="modal-dica">Com esse e-mail e senha você entra no portal dos materiais sempre que quiser.</p>
             {erro && <p className="modal-erro">{erro}</p>}
             {jaTemAcesso && (

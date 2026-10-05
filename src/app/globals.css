@@ -654,32 +654,38 @@ section[id] {
 .modal-fundo {
   position: fixed;
   inset: 0;
-  background: rgba(31, 42, 68, 0.6);
+  background: rgba(31, 42, 68, 0.65);
+  backdrop-filter: blur(4px);
   display: grid;
   place-items: center;
-  padding: 16px;
+  padding: 14px;
   z-index: 50;
 }
 
 .modal {
   position: relative;
   width: 100%;
-  max-width: 400px;
-  max-height: calc(100vh - 32px);
+  max-width: 480px;
+  max-height: calc(100vh - 28px);
   overflow-y: auto;
+  scrollbar-width: thin;
   background: var(--branco);
-  border-radius: 22px;
-  padding: 30px 24px 24px;
+  border-radius: 20px;
+  padding: 22px 22px 18px;
+  box-shadow: 0 20px 45px -12px rgba(31, 42, 68, 0.3);
 }
 
 .modal h3 {
-  font-size: 1.6rem;
+  font-size: 1.45rem;
   text-align: center;
+  margin-bottom: 2px;
 }
 
 .modal-sub {
   text-align: center;
   color: var(--tinta-suave);
+  font-size: 0.88rem;
+  margin-bottom: 12px;
 }
 
 .modal-fechar {
@@ -688,50 +694,81 @@ section[id] {
   right: 14px;
   background: none;
   border: 0;
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   line-height: 1;
   cursor: pointer;
   color: var(--tinta-suave);
+  transition: color 0.15s;
+}
+
+.modal-fechar:hover {
+  color: var(--tinta);
+}
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 12px;
+}
+
+.checkout-grid-full {
+  grid-column: 1 / -1;
 }
 
 .modal label {
-  display: block;
+  display: flex;
+  flex-direction: column;
   font-weight: 700;
-  font-size: 0.95rem;
-  margin-bottom: 14px;
+  font-size: 0.84rem;
+  color: var(--tinta);
+  margin-bottom: 0;
 }
 
 .modal input {
   display: block;
   width: 100%;
-  margin-top: 6px;
-  padding: 13px 14px;
-  border: 2px solid var(--borda);
-  border-radius: 12px;
-  font: 600 1rem 'Nunito', sans-serif;
+  margin-top: 4px;
+  padding: 9px 12px;
+  border: 1.5px solid var(--borda);
+  border-radius: 10px;
+  font: 600 0.94rem 'Nunito', sans-serif;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .modal input:focus {
   outline: none;
   border-color: var(--coral);
+  box-shadow: 0 0 0 3px rgba(255, 107, 74, 0.15);
+}
+
+.modal-dica {
+  font-size: 0.78rem;
+  color: var(--tinta-suave);
+  margin: 10px 0 8px;
+  line-height: 1.35;
+  text-align: center;
 }
 
 .modal .btn-buy {
+  padding: 12px 18px;
+  font-size: 1.05rem;
+  border-radius: 12px;
   animation: none;
 }
 
 .modal-erro {
   color: #c62828;
   font-weight: 700;
-  font-size: 0.92rem;
+  font-size: 0.86rem;
   text-align: center;
+  margin: 6px 0;
 }
 
 .modal-nota {
   text-align: center;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--tinta-suave);
-  margin: 14px 0 0;
+  margin: 10px 0 0;
 }
 
 .checkout-aviso-pendente {
@@ -892,4 +929,15 @@ section[id] {
     padding: 9px 16px !important;
     font-size: 0.86rem !important;
   }
+
+  .modal {
+    padding: 20px 16px 16px;
+    max-width: calc(100vw - 24px);
+  }
+
+  .checkout-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
 }
+
