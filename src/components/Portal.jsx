@@ -122,7 +122,7 @@ export default function Portal({ nome }) {
       <header className="portal-topo">
         <div className="wrap portal-topo-conteudo">
           <span className="portal-marca" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-            <img src="/logo.png" alt="Baú Pedagógico" width={32} height={32} style={{ borderRadius: '50%', objectFit: 'cover' }} />
+            <img src="/logo.png" alt="Aprendoca" width={32} height={32} style={{ borderRadius: '50%', objectFit: 'cover' }} />
             <span>{SITE.marca}</span>
           </span>
           <div className="portal-usuario">
@@ -136,7 +136,7 @@ export default function Portal({ nome }) {
 
       <main className="wrap portal-corpo">
         <div className="portal-boasvindas">
-          <h1>Seu baú de materiais</h1>
+          <h1>Seu acervo de materiais</h1>
           <p>
             {arvore ? qtd(arvore.get('').total) : 'Carregando…'} · baixe quantos quiser,
             quando quiser.

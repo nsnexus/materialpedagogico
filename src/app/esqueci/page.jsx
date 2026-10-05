@@ -40,7 +40,7 @@ export default function Esqueci() {
     <main className="entrar">
       <div className="entrar-card">
         <Link href="/" className="entrar-marca" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-          <img src="/logo.png" alt="Baú Pedagógico" width={38} height={38} style={{ borderRadius: '50%', objectFit: 'cover' }} />
+          <img src="/logo.png" alt="Aprendoca" width={38} height={38} style={{ borderRadius: '50%', objectFit: 'cover' }} />
           <span>{SITE.marca}</span>
         </Link>
         <h1>Esqueci a senha</h1>

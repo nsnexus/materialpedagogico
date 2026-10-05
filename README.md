@@ -1,4 +1,4 @@
-# Baú Pedagógico
+# Aprendoca
 
 Página de vendas do acervo pedagógico (R$ 9,99, acesso vitalício) com checkout Pix próprio
 (gateway centralizado do NSMusic, ver `../nsmusic/docs/GATEWAY_INTEGRATION.md`) e portal da cliente
@@ -39,7 +39,7 @@ a versão e derruba na hora todas as sessões abertas dela.
 
 `/esqueci` manda um link de uso único (válido por 1 hora, guardado só como hash no KV) para `/redefinir`.
 O envio usa o [Resend](https://resend.com): configure `RESEND_API_KEY` e `EMAIL_REMETENTE`
-(ex: `Baú Pedagógico <acesso@seudominio.com.br>`, com o domínio verificado no Resend).
+(ex: `Aprendoca <acesso@seudominio.com.br>`, com o domínio verificado no Resend).
 Sem essas variáveis, a tela pede para a cliente falar com o suporte, e o admin gera o link pelo painel.
 A resposta é igual exista ou não a conta, para não revelar quem é cliente; no máximo 3 envios por hora por e-mail.
 

@@ -72,7 +72,7 @@ export default function Home() {
         <div className="wrap top-banner-wrap">
           <span className="top-banner-badge">✨ OFERTA DE LANÇAMENTO</span>
           <span className="top-banner-texto">
-            Acesso vitalício ao baú completo (+25.000 materiais) por apenas <strong>{PRECO}</strong>
+            Acesso vitalício ao acervo completo (+25.000 materiais) por apenas <strong>{PRECO}</strong>
           </span>
           <a href="/entrar" className="top-banner-link">
             Já sou cliente · Entrar →
@@ -82,8 +82,8 @@ export default function Home() {
 
       <nav className="site-header">
         <div className="wrap site-nav-wrap">
-          <a href="#" className="site-brand" aria-label="Baú Pedagógico - Início">
-            <img src="/logo.png" alt="Baú Pedagógico" width={48} height={48} className="site-logo-img" />
+          <a href="#" className="site-brand" aria-label="Aprendoca - Início">
+            <img src="/logo.png" alt="Aprendoca" width={48} height={48} className="site-logo-img" />
             <div className="site-brand-text">
               <span className="site-brand-nome">{SITE.marca}</span>
               <span className="site-brand-sub">Acervo Educativo</span>
@@ -127,7 +127,7 @@ export default function Home() {
               </span>
             </h1>
             <p className="hero-sub">
-              Atividades para imprimir, cadernos de colorir, datas comemorativas e materiais de gestão escolar num baú só. Abra a pasta, imprima e
+              Atividades para imprimir, cadernos de colorir, datas comemorativas e materiais de gestão escolar reunidos em um só lugar. Abra a pasta, imprima e
               aplique amanhã mesmo.
             </p>
             <ul className="checks">
@@ -194,7 +194,7 @@ export default function Home() {
       <section className="secao secao-branca" id="materiais">
         <div className="wrap">
           <p className="sobretitulo">espia só 👀</p>
-          <h2>Um pouquinho do que tem dentro do baú</h2>
+          <h2>Um pouquinho do que você encontra na Aprendoca</h2>
           <p className="secao-sub">
             Exemplos do tipo de atividade que você encontra: letra grande, espaço pra criança fazer e pronto pra imprimir.
           </p>
@@ -375,7 +375,7 @@ export default function Home() {
         <Estrela className="deco deco-oferta-1" />
         <Estrela cor="#2ec4a0" className="deco deco-oferta-2" />
         <div className="wrap">
-          <h2>Leve o baú inteiro hoje</h2>
+          <h2>Garanta seu acesso à Aprendoca hoje</h2>
           <div className="plano">
             <span className="plano-faixa">PLANO ÚNICO</span>
             <p className="plano-nome">{SITE.marca} Vitalício</p>

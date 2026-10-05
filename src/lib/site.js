@@ -2,7 +2,7 @@
 // Seções com lista vazia (bônus, depoimentos) ou autora sem nome não aparecem.
 
 export const SITE = {
-  marca: 'Baú Pedagógico',
+  marca: 'Aprendoca',
   appId: 'bau-pedagogico',
   preco: 9.99,
   // Número real de arquivos no portal (atualize quando subir material novo).
@@ -34,13 +34,13 @@ export const SITE = {
 
   autora: {
     nome: 'Jéssica Queiroz',
-    titulo: 'Responsável pelo Baú Pedagógico',
+    titulo: 'Criadora da Aprendoca',
     foto: '/autora.jpg',
     // Um item por parágrafo.
     texto: [
-      'O Baú Pedagógico nasceu da vontade de reunir, num lugar só, materiais que realmente facilitem a rotina de professores, coordenadores e famílias que acompanham crianças na educação infantil e nos anos iniciais.',
+      'A Aprendoca nasceu da vontade de reunir, num lugar só, materiais que realmente facilitem a rotina de professores, coordenadores e famílias que acompanham crianças na educação infantil e nos anos iniciais.',
       'Sei como é gastar a noite procurando atividade, montando ficha e adaptando projeto. Por isso organizei tudo por pastas: atividades para imprimir, cadernos de colorir, datas comemorativas e documentos de gestão escolar prontos para editar.',
-      'O Baú foi criado para economizar o tempo de quem ensina e oferecer recursos que possam ser usados de verdade no dia a dia, na sala de aula ou em casa.',
+      'A Aprendoca foi criada para economizar o tempo de quem ensina e oferecer recursos que possam ser usados de verdade no dia a dia, na sala de aula ou em casa.',
     ],
     valores: ['⏱️ Menos tempo planejando', '🖨️ Pronto para imprimir', '✏️ Editável no Word'],
   },

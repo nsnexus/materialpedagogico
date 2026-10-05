@@ -33,7 +33,7 @@ export default function Entrar() {
     <main className="entrar">
       <form className="entrar-card" onSubmit={entrar}>
         <Link href="/" className="entrar-marca" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-          <img src="/logo.png" alt="Baú Pedagógico" width={38} height={38} style={{ borderRadius: '50%', objectFit: 'cover' }} />
+          <img src="/logo.png" alt="Aprendoca" width={38} height={38} style={{ borderRadius: '50%', objectFit: 'cover' }} />
           <span>{SITE.marca}</span>
         </Link>
         <h1>Entrar no portal</h1>

@@ -39,7 +39,7 @@ export function AdminLogin() {
     <main className="entrar">
       <form className="entrar-card" onSubmit={entrar}>
         <span className="entrar-marca" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
-          <img src="/logo.png" alt="Baú Pedagógico" width={38} height={38} style={{ borderRadius: '50%', objectFit: 'cover' }} />
+          <img src="/logo.png" alt="Aprendoca" width={38} height={38} style={{ borderRadius: '50%', objectFit: 'cover' }} />
           <span>{SITE.marca}</span>
         </span>
         <h1>Painel administrativo</h1>
@@ -189,8 +189,8 @@ function SecaoClientes() {
     const siteUrl = typeof window !== 'undefined' ? window.location.origin : '';
     const msg =
       c.status === 'pendente'
-        ? `Olá ${c.nome || ''}! Vi que você gerou o Pix para o Baú Pedagógico. Ficou alguma dúvida sobre o material ou precisa de ajuda para concluir seu acesso?`
-        : `Olá ${c.nome || ''}! Seu acesso ao Baú Pedagógico está liberado! Você pode entrar pelo link: ${siteUrl}/entrar com seu e-mail ${c.email} e a senha que escolheu.`;
+        ? `Olá ${c.nome || ''}! Vi que você gerou o Pix para a Aprendoca. Ficou alguma dúvida sobre o material ou precisa de ajuda para concluir seu acesso?`
+        : `Olá ${c.nome || ''}! Seu acesso à Aprendoca está liberado! Você pode entrar pelo link: ${siteUrl}/entrar com seu e-mail ${c.email} e a senha que escolheu.`;
     return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
   }
 
@@ -472,7 +472,7 @@ export function AdminPainel() {
       <header className="portal-topo">
         <div className="wrap portal-topo-conteudo">
           <span className="portal-marca" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-            <img src="/logo.png" alt="Baú Pedagógico" width={32} height={32} style={{ borderRadius: '50%', objectFit: 'cover' }} />
+            <img src="/logo.png" alt="Aprendoca" width={32} height={32} style={{ borderRadius: '50%', objectFit: 'cover' }} />
             <span>Painel · {SITE.marca}</span>
           </span>
           <div className="portal-usuario">
