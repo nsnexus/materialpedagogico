@@ -74,6 +74,9 @@ export async function POST(req) {
     return res;
   } catch (err) {
     console.error('[POST /api/checkout]', err.message);
-    return NextResponse.json({ error: 'Não foi possível gerar o Pix agora. Tente de novo em instantes.' }, { status: 502 });
+    return NextResponse.json(
+      { error: `Falha ao gerar Pix: ${err.message || 'Erro desconhecido'}`, detalhe: err.message },
+      { status: 502 }
+    );
   }
 }
