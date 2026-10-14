@@ -7,7 +7,8 @@ export const SITE = {
   preco: 9.99,
   // Número real de arquivos no portal (atualize quando subir material novo).
   qtdMateriais: '+25.000',
-  whatsapp: '', // ex: '5581999999999' — mostra botão de suporte se preenchido
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP || '', // ex: '5581999999999' — mostra botão de suporte se preenchido
+  pixelId: process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID || '1141699971526827',
 
   categorias: [
     { icone: '🧸', titulo: 'Educação infantil' },

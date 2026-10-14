@@ -8,11 +8,13 @@ export default function Entrar() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
+  const [pendente, setPendente] = useState(false);
   const [enviando, setEnviando] = useState(false);
 
   async function entrar(e) {
     e.preventDefault();
     setErro('');
+    setPendente(false);
     setEnviando(true);
     try {
       const res = await fetch('/api/entrar', {
@@ -21,13 +23,30 @@ export default function Entrar() {
         body: JSON.stringify({ email, senha }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Não foi possível entrar.');
+      if (!res.ok) {
+        if (data.pendente || res.status === 402) {
+          setPendente(true);
+        }
+        throw new Error(data.error || 'Não foi possível entrar.');
+      }
       window.location.href = '/portal';
     } catch (err) {
       setErro(err.message);
       setEnviando(false);
     }
   }
+
+  const whatsappNum = String(SITE.whatsapp || '').replace(/\D/g, '');
+  const textoPendente = `Olá! Fiz o pagamento Pix para a Aprendoca com o e-mail ${email}, mas consta como pendente no login. Segue meu comprovante:`;
+  const textoGeral = `Olá! Preciso de ajuda com meu acesso na Aprendoca${email ? ` (e-mail: ${email})` : ''}.`;
+
+  const linkSuportePendente = whatsappNum
+    ? `https://wa.me/${whatsappNum}?text=${encodeURIComponent(textoPendente)}`
+    : `mailto:narcisofelizardo@gmail.com?subject=${encodeURIComponent('Comprovante de pagamento Aprendoca')}&body=${encodeURIComponent(textoPendente)}`;
+
+  const linkSuporteGeral = whatsappNum
+    ? `https://wa.me/${whatsappNum}?text=${encodeURIComponent(textoGeral)}`
+    : `mailto:narcisofelizardo@gmail.com?subject=${encodeURIComponent('Suporte Aprendoca')}&body=${encodeURIComponent(textoGeral)}`;
 
   return (
     <main className="entrar">
@@ -52,7 +71,21 @@ export default function Entrar() {
             autoComplete="current-password"
           />
         </label>
-        {erro && <p className="modal-erro">{erro}</p>}
+        {erro && (
+          <div className="entrar-erro-container">
+            <p className="modal-erro">{erro}</p>
+            {pendente && (
+              <a
+                href={linkSuportePendente}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-suporte-pix"
+              >
+                💬 Enviar comprovante no WhatsApp
+              </a>
+            )}
+          </div>
+        )}
         <button className="btn-buy btn-full" disabled={enviando}>
           {enviando ? 'Entrando…' : 'Entrar'}
         </button>
@@ -61,6 +94,12 @@ export default function Entrar() {
         </p>
         <p className="modal-nota">
           Ainda não tem acesso? <Link href="/#oferta">Garanta o seu</Link>
+        </p>
+        <p className="modal-nota modal-nota-suporte">
+          Problemas com o acesso?{' '}
+          <a href={linkSuporteGeral} target="_blank" rel="noopener noreferrer">
+            Fale com o suporte
+          </a>
         </p>
       </form>
     </main>

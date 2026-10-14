@@ -57,6 +57,13 @@ export default function Checkout() {
       } else {
         setPedidoPendente(null);
       }
+      if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+        window.fbq('track', 'InitiateCheckout', {
+          content_name: SITE.marca,
+          value: SITE.preco,
+          currency: 'BRL',
+        });
+      }
     };
     window.addEventListener('abrir-checkout', abrir);
     return () => window.removeEventListener('abrir-checkout', abrir);
@@ -71,6 +78,13 @@ export default function Checkout() {
         const data = await res.json();
         if (!ativo) return;
         if (data.status === 'PAID') {
+          if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+            window.fbq('track', 'Purchase', {
+              content_name: SITE.marca,
+              value: SITE.preco,
+              currency: 'BRL',
+            });
+          }
           setEtapa('pago');
           salvarPedido(null);
           return;

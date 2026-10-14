@@ -82,6 +82,47 @@
   font-weight: 700;
 }
 
+.entrar-erro-container {
+  margin-bottom: 14px;
+}
+
+.entrar-erro-container .modal-erro {
+  margin-bottom: 8px;
+}
+
+.btn-suporte-pix {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 16px;
+  background: #25d366;
+  color: #ffffff !important;
+  font: 800 0.92rem 'Nunito', sans-serif;
+  text-decoration: none;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.btn-suporte-pix:hover {
+  background: #20bd5a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+}
+
+.modal-nota-suporte {
+  margin-top: 14px !important;
+  padding-top: 12px;
+  border-top: 1px solid #f0e7df;
+}
+
+.modal-nota-suporte a {
+  color: #16a864 !important;
+}
+
 /* Portal */
 .portal {
   min-height: 100vh;
