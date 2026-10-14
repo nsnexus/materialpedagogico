@@ -36,7 +36,8 @@ export default function Entrar() {
     }
   }
 
-  const whatsappNum = String(SITE.whatsapp || '').replace(/\D/g, '');
+  const rawZap = String(SITE.whatsapp || '').replace(/\D/g, '');
+  const whatsappNum = rawZap.length === 10 || rawZap.length === 11 ? `55${rawZap}` : rawZap;
   const textoPendente = `Olá! Fiz o pagamento Pix para a Aprendoca com o e-mail ${email}, mas consta como pendente no login. Segue meu comprovante:`;
   const textoGeral = `Olá! Preciso de ajuda com meu acesso na Aprendoca${email ? ` (e-mail: ${email})` : ''}.`;
 

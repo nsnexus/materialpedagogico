@@ -7,7 +7,7 @@ export const SITE = {
   preco: 9.99,
   // Número real de arquivos no portal (atualize quando subir material novo).
   qtdMateriais: '+25.000',
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP || '', // ex: '5581999999999' — mostra botão de suporte se preenchido
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP || '5594991064043', // (94) 99106-4043
   pixelId: process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID || '1141699971526827',
 
   categorias: [
